@@ -15,6 +15,7 @@ myApp.config(function($mdThemingProvider) {
       'default': 'A400' // use shade 200 for default, and keep all other shades the same
     });
 });
+
 myApp.config(function(uiGmapGoogleMapApiProvider) {
     uiGmapGoogleMapApiProvider.configure({
         key: 'AIzaSyD0BHXdv1_QwK5H_lrb1jFSdrwfDkn9KyA',
@@ -23,12 +24,96 @@ myApp.config(function(uiGmapGoogleMapApiProvider) {
     });
 });
 //controller for maps
-myApp.controller('certContrl',function($scope, uiGmapGoogleMapApi){
+myApp.controller('certContrl',function($scope, uiGmapGoogleMapApi,$http){
+    //
+    //$http.get('http://localhost:1000/getIncedents/').                   //getting json from router
+    //    then(function(response) {
+    //        var result=JSON.parse(response);
+    //        $scope.incidentArray==result.incedents;
+    //    });
 
 
     uiGmapGoogleMapApi.then(function(maps) {
 
-        $scope.map = { center: { latitude: 40.35245, longitude:-94.88225299999999}, zoom: 8 };
+        $scope.map = { center: { latitude: 40.35245, longitude:-94.8822529999999}, zoom: 8 };
+        $scope.vehicles = [
+            {
+                id: "first",
+                "name": "disaster2",
+                "type": "Fire",
+                "groups": [
+                    {
+                        "name": "disaster",
+                        "members": [
+                            {
+                                "fname": "kumar",
+                                "lname": "k",
+                                "emailid": "k@g.com",
+                                "mobile": "91947430",
+                                "bloodgrp": "O+",
+                                "userid": "73660fc0-5bcd-11e5-a383-7591ee5b4cb4",
+                                "groupid": "ef736660-5bd4-11e5-9e05-95850df1e324",
+                                "img": "./73660fc0-5bcd-11e5-a383-7591ee5b4cb4.jpg"
+                            }
+                        ],
+                        "groupid": "ef736660-5bd4-11e5-9e05-95850df1e324"
+                    }
+                ],
+                "location": {
+                    "latitude": 40.35245,
+                    "longitude": -94.8822529999999
+                },
+                "incedentid": "c41fd3d0-5bd5-11e5-9e05-95850df1e324",
+                "status": "A",
+                "createDate": "2015-09-15T18:15:38.125Z"
+            },
+            {
+                id: "second",
+                "name": "disaster1",
+                "type": "Fire",
+                "groups": [
+                    {
+                        "name": "disaster",
+                        "members": [
+                            {
+                                "fname": "kumar",
+                                "lname": "k",
+                                "emailid": "k@g.com",
+                                "mobile": "91947430",
+                                "bloodgrp": "O+",
+                                "userid": "73660fc0-5bcd-11e5-a383-7591ee5b4cb4",
+                                "groupid": "ef736660-5bd4-11e5-9e05-95850df1e324",
+                                "img": "./73660fc0-5bcd-11e5-a383-7591ee5b4cb4.jpg"
+                            },
+                            {
+                                "fname": "t",
+                                "lname": "t",
+                                "emailid": "t@g.com",
+                                "mobile": "816",
+                                "bloodgrp": "O+",
+                                "userid": "a9943b10-5bcf-11e5-a383-7591ee5b4cb4",
+                                "groupid": "ef736660-5bd4-11e5-9e05-95850df1e324",
+                                "img": "./a9943b10-5bcf-11e5-a383-7591ee5b4cb4.jpg"
+                            }
+                        ],
+                        "groupid": "ef736660-5bd4-11e5-9e05-95850df1e324"
+                    }
+                ],
+                "location": {
+                    "latitude": 40.35245,
+                    "longitude": -94.8822529999999
+                },
+                "incedentid": "681432d0-5c88-11e5-9e05-95850df1e324",
+                "status": "A",
+                "createDate": "2015-09-16T15:34:23.614Z"
+            }
+        ];
+       //$http.get('http://localhost:1000/getIncedents/').then(function(response){
+       //    var result=JSON.parse(response);
+       //    $scope.incident=result.incedents;
+       //
+       //});
+
     });
 
 });

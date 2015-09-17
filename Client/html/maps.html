@@ -1,8 +1,11 @@
 
 <section ng-controller="certContrl">
-    <ui-gmap-google-map class="col-md-12 row" layout="column" center='map.center' zoom='map.zoom'></ui-gmap-google-map>
-    <!--<ui-gmap-marker-->
-    <!--idKey='1'-->
-    <!--coords='map.center'-->
-    <!--</ui-gmap-marker>-->
+    <!--<ui-gmap-google-map class="col-md-12 row" layout="column" center='map.center' zoom='map.zoom'>-->
+
+
+    <!--</ui-gmap-google-map>-->
+    <ui-gmap-google-map class="col-md-12 row" layout="column" center="map.center" zoom="map.zoom" draggable="true">
+        <ui-gmap-markers models="vehicles" coords="'location'" icon="'icon'">
+        </ui-gmap-markers>
+    </ui-gmap-google-map>
 </section>

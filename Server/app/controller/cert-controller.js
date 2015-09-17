@@ -18,7 +18,6 @@ db.open(function(err, db) {
 	mongoDB= db
   }
 });
-
 module.exports.login = function(req, res){
 	var body = "";
 	req.on('data', function(item){
@@ -56,7 +55,7 @@ module.exports.login = function(req, res){
 	});
 }
 module.exports.logincheck = function(req, res){
-	mongoDB.collection('USER_SESSION', function(err, coll) { 
+	mongoDB.collection('USER_SESSION', function(err, coll) {
 		coll.findOne({sessionId:req.sessionID},{ _id:0}, function(err, data) {
        		if(data!=null && data != undefined){
 				   data['success'] = true;
@@ -73,7 +72,7 @@ module.exports.logincheck = function(req, res){
 module.exports.logout = function(req, res){
 	var sessionId = req.sessionID;
 	 req.session.destroy();
-	mongoDB.collection('USER_SESSION', function(err, coll) { 
+	mongoDB.collection('USER_SESSION', function(err, coll) {
 		coll.remove({sessionId:sessionId});
 		res.send("success");
 	});
@@ -86,7 +85,7 @@ module.exports.register = function(req, res){
 	var body = req.body;
 	body['isApproved'] = false;
 	body['userid'] = uid;
-	mongoDB.collection('USER', function(err, coll) { 
+	mongoDB.collection('USER', function(err, coll) {
 		coll.insert(body, function(err){
 			if(!err){
 				delete body.password;
@@ -100,7 +99,7 @@ module.exports.register = function(req, res){
 }
 
 module.exports.getusers = function(req, res){
-	mongoDB.collection('USER', function(err, coll) { 
+	mongoDB.collection('USER', function(err, coll) {
 		coll.find({isApproved:true,groupid:null},{password:0, _id:0, isApproved:0}).toArray(function(err, items) {
        		var response = {};
 			if(!err){
@@ -121,7 +120,7 @@ module.exports.getSepusers = function(req, res){
 	});
 	req.on('end', function(){
 		var query = {'userid':{'$in':JSON.parse(body)}};
-		mongoDB.collection('USER', function(err, coll) { 
+		mongoDB.collection('USER', function(err, coll) {
 			coll.find(query,{password:0, _id:0, isApproved:0}).toarry(function(err, items) {
 					var response = {};
 					if(!err){
@@ -146,7 +145,7 @@ module.exports.createIncedent = function(req, res){
 		body['incedentid'] = uuid.v1();
 		body['status'] = 'A';
 		body['createDate'] = new Date();
-		mongoDB.collection('INCEDENTS', function(err, coll) { 
+		mongoDB.collection('INCEDENTS', function(err, coll) {
 			coll.insert(body, function(err, data) {
 				if(!err){
 					res.send({"success":true});
@@ -168,7 +167,7 @@ module.exports.addIncedentStatus = function(req, res){
 	}
 	body['id'] = uid;
 	body['createDate'] = new Date();
-	mongoDB.collection('INCEDENTS_WALL', function(err, coll) { 
+	mongoDB.collection('INCEDENTS_WALL', function(err, coll) {
 		coll.insert(body, function(err, data) {
 			if(!err){
 				res.send({"success":true});
@@ -180,7 +179,7 @@ module.exports.addIncedentStatus = function(req, res){
 }
 
 module.exports.getIncedents = function(req, res){
-	mongoDB.collection('INCEDENTS', function(err, coll) { 
+	mongoDB.collection('INCEDENTS', function(err, coll) {
 		coll.find({},{_id:0}).toArray(function(err, items) {
 			if(!err){
 				res.send({"success":true,'incedents':items});
@@ -198,11 +197,11 @@ module.exports.getIncedentStatus = function(req, res){
 	});
 	req.on('end', function(){
 		body = JSON.parse(body)
-		mongoDB.collection('INCEDENTS_WALL', function(err, coll) { 
+		mongoDB.collection('INCEDENTS_WALL', function(err, coll) {
 			coll.find(body,{_id:0}).toArray(function(err, data) {
 				if(!err){
 					var pUsers = arrayOfValues(data,'postedby');
-					mongoDB.collection('USER', function(err, ucoll) { 
+					mongoDB.collection('USER', function(err, ucoll) {
 						ucoll.find({'userid':{'$in':pUsers}},{_id:0}).toArray(function(err,tdata) {
 							for(var j = 0; j< data.length; j++ ){
 								for(var i = 0; i< tdata.length; i++ ){
@@ -231,7 +230,7 @@ module.exports.getuser = function(req, res){
 	});
 	req.on('end', function(){
 		var query = JSON.parse(body);
-		mongoDB.collection('USER', function(err, coll) { 
+		mongoDB.collection('USER', function(err, coll) {
 			coll.findOne(query,{password:0, _id:0, isApproved:0}, function(err, data) {
 					if(data!=null && data != undefined){
 					data['success'] = true;
@@ -247,7 +246,7 @@ module.exports.getuser = function(req, res){
 }
 
 module.exports.getpendingusers = function(req, res){
-	mongoDB.collection('USER', function(err, coll) { 
+	mongoDB.collection('USER', function(err, coll) {
 		coll.find({isApproved:false},{password:0, _id:0, isApproved:0}).toArray(function(err, items) {
        		var response = {};
 			if(!err){
@@ -299,7 +298,7 @@ module.exports.rejectuser = function(req, res){
 
 
 module.exports.pendactusers = function(req, res){
-	mongoDB.collection('USER', function(err, coll) { 
+	mongoDB.collection('USER', function(err, coll) {
 		coll.find({isApproved:false},{password:0, _id:0, isApproved:0}).toArray(function(err, items) {
 			var response = {};
 			if(!err){
@@ -400,7 +399,7 @@ module.exports.deletegroup = function(req, res){
 
 module.exports.getgroups = function(req, res){
 	
-	mongoDB.collection('GROUPS', function(err, coll) { 
+	mongoDB.collection('GROUPS', function(err, coll) {
 		coll.find({},{_id:0}).toArray(function(err, items) {
         	var response = {};
 			if(!err){
@@ -431,7 +430,7 @@ module.exports.getmessages = function(req, res){
 		body = JSON.parse(body)
 		currentUserid.push(body);
 		var query = {users:{'$in':currentUserid}}
-		mongoDB.collection('MESSAGES', function(err, coll) { 
+		mongoDB.collection('MESSAGES', function(err, coll) {
 			coll.find(query,{_id:0}).toArray(function(err, items) {
 				var resData = {};
 				if(!err){
@@ -468,7 +467,7 @@ module.exports.onlineusers = function(req, res){
 		var currentUserid =[];
 		currentUserid.push(body);
 		var query={"userid":{"$nin":currentUserid}, "online" : true};
-		mongoDB.collection('USER', function(err, coll) { 
+		mongoDB.collection('USER', function(err, coll) {
 			coll.find(query,{password:0, _id:0, isApproved:0}).toArray(function(err, items) {
 				var response = {};
 				if(!err){
@@ -494,7 +493,7 @@ module.exports.getmessage = function(req, res){
 		body = JSON.parse(body);
 		currentUserid = body.users;
 		var query = {users:{'$all':currentUserid}}
-		mongoDB.collection('MESSAGES', function(err, coll) { 
+		mongoDB.collection('MESSAGES', function(err, coll) {
 			coll.findOne(query,{_id:0}, function(err, item) {
 				var resData = {};
 				if(!err && item !=null){
