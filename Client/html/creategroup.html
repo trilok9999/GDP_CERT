@@ -1,0 +1,35 @@
+<md-dialog>
+  <form>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2 class="white">{{cgformtitle}}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <i class="material-icons md-36 white">close</i>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content hide-md hide-sm style="width:600px;height:1300px; ">
+    <div formtype="creategroupform"></div>
+    
+  </md-dialog-content>
+   <md-dialog-content hide-gt-sm  style="width:300px;height:1100px; ">
+    <div formtype="creategroupform"></div>
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+    <md-button ng-click="cancel()" ng-if="$root.cgformid==='cgform1'" style="margin-right:20px;">
+      Cancel
+    </md-button>
+    <md-button  class="md-primary md-raised white" ng-if="$root.cgformid==='cgform1'" ng-click="mdcgnext()">
+     Next
+    </md-button>
+    <md-button  ng-if="$root.cgformid==='cgform2'" ng-click="mdcgback()">
+     Back
+    </md-button>
+    <md-button  class="md-primary md-raised white" ng-if="$root.cgformid==='cgform2'" ng-click="mdcgcreate()">
+     Create
+    </md-button>
+    
+  </div>
+  </form>
+</md-dialog>

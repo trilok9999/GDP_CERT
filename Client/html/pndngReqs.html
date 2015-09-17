@@ -1,0 +1,45 @@
+<div layout-gt-md="row" ng-if="$root.menuItemHome">
+  <md-content ng-init="getPendingMembers()" flex="35" hide-md hide-sm>
+    <md-list-item ng-init="$first?$root.getuser(member.userid):''" ng-class = "{'selectedListItem':getSelectedPUser()===member.userid}" ng-click="$root.getuser(member.userid);" class="md-2-line" ng-repeat="member in $root.pendingmembers track by $index">
+             <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
+          <img ng-src="{{member.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
+          <div class="md-list-item-text compact">
+            <h3>{{member.fname}}</h3>
+            <p>{{member.emailid}}</p>
+          </div>
+          
+      </md-list-item>
+  </md-content>
+  <md-content ng-init="getPendingMembers();" flex="35" hide-gt-md>
+    <md-list-item ng-click="$root.getuser(member.userid);$root.menuItemHome=!$root.menuItemHome" class="md-2-line" ng-repeat="member in $root.pendingmembers track by $index">
+             <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
+          <img ng-src="{{member.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
+          <div class="md-list-item-text compact">
+            <h3>{{member.fname}}</h3>
+            <p>{{member.emailid}}</p>
+          </div>
+          <md-button class="md-primary md-raised">
+            <span layout="row" ng-click="$root.activateuser(member.userid);" layout-align="center center">Approve</span>
+          </md-button>
+           <md-button class="md-primary md-raised">
+            <span layout="row" ng-click="$root.rejectuser(member.userid);" layout-align="center center">Reject</span>
+          </md-button>
+      </md-list-item>
+  </md-content>
+  <md-content flex hide-md hide-sm ng-init = "$root.curuser={};" ng-if="$root.pendingmembers.length>0">
+
+    <profile></profile>
+  
+  </md-content>
+  
+</div>
+<md-content ng-if ="!$root.menuItemHome" flex hide-gt-md ng-init = "$root.curuser={};">
+    <md-button style="position:fixed; margin-top:-2%;margin-left:-2.5%" class="md-primary" ng-click="$root.menuItemHome = !$root.menuItemHome">
+<md-tooltip>
+            Back
+          </md-tooltip>
+      <i class="material-icons  md-48">keyboard_backspace</i>
+    </md-button>
+    <profile-sm></profile-sm>
+  
+  </md-content>

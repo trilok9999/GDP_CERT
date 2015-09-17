@@ -1,0 +1,71 @@
+<md-content class="md-padding autocomplete" layout="column">
+<md-button style="position:fixed; margin-top:-2%;margin-left:-2.5%" class="md-primary" ng-click="$root.createIncident=false;$root.curincident={}">
+<md-tooltip>
+            Back
+          </md-tooltip>
+      <i class="material-icons  md-48">keyboard_backspace</i>
+    </md-button>
+
+    <md-button style="position:fixed;right:2.5%; margin-top:-1.5%" class="md-fab  md-primary" ng-click="saveIncident()">
+<md-tooltip>
+            Save Incident
+          </md-tooltip>
+      <i class="material-icons md-36 white">save</i>
+    </md-button>
+<md-input-container style="margin-top:2%" >
+  <label>Incident Name</label>
+  <input ng-required ng-model="$root.curincident.name">
+</md-input-container>
+<md-input-container>
+        <label>Incident Type</label>
+        <md-select ng-model="$root.curincident.type">
+          <md-option ng-repeat="type in $root.incidenttypes" value="{{type}}">{{type}}</md-option>
+        </md-select>
+      </md-input-container> 
+<div layout="row" >
+      <md-input-container flex>
+        <label>Location Latitude</label>
+        <input ng-model="$root.curincident.location.latitude">
+          
+      </md-input-container>
+      <md-input-container flex>
+        <label>Location Longitude</label>
+        <input ng-model="$root.curincident.location.longitude">
+          
+      </md-input-container>
+
+    </div>
+
+  <md-contact-chips
+        ng-model="$root.curincident.groups"
+        md-contacts="$root.querySearchGFI($query)"
+        md-contact-name="name"
+        md-contact-image="img"
+        md-contact-email="leadername"
+        md-require-match
+        filter-selected="$root.filterSelected"
+        placeholder="Groups">
+    </md-contact-chips>
+    <md-list class="fixedRows">
+      <md-subheader class="md-no-sticky">Groups</md-subheader>
+      <md-list-item class="md-2-line contact-item" ng-repeat="group in $root.groupsforincident track by $index"
+          ng-if="$root.curincident.groups.indexOf(group) < 0">
+           <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
+        <img ng-src="{{group.leader.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
+        <div class="md-list-item-text compact">
+          <h3>{{group.name}}</h3>
+          <p>{{group.leader.fname}}</p>
+        </div>
+      </md-list-item>
+      <md-list-item class="md-2-line contact-item selected" ng-repeat="group in $root.groupsforincident track by $index" ng-if="$root.curincident.groups.indexOf(group) >= 0">
+       <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
+        <img ng-src="{{group.leader.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
+        <div class="md-list-item-text compact">
+          <h3>{{group.name}}</h3>
+          <p>{{group.leader.fname}}</p>
+        </div>
+      </md-list-item>
+    </md-list>
+    
+    
+</md-content>

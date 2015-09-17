@@ -1,0 +1,46 @@
+<md-dialog  ng-init="getMembers()">
+  <form>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2 class="white">New Message</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <i class="material-icons md-36 white">close</i>
+      </md-button>
+    </div>
+  </md-toolbar>
+   <md-dialog-content style="width:700px;max-height:810px; ">
+    <div>
+ 
+
+
+
+<md-contact-chips
+        ng-model="$root.group.members"
+        md-contacts="$root.querySearch($query)"
+        md-contact-name="fname"
+        md-contact-image="img"
+        md-contact-email="emailid"
+        md-require-match
+        filter-selected="$root.filterSelected"
+        placeholder="Members">
+    </md-contact-chips>
+    
+
+
+    <md-input-container flex="80">
+		<label>Message</label>
+		<textarea ng-model="newMessage"></textarea>
+	</md-input-container>
+</div>
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+    <md-button  class="md-primary md-raised white" ng-click="mdMsgSend(newMessage)">
+     Send
+    </md-button>
+    <md-button ng-click="cancel()" style="margin-right:20px;">
+      Cancel
+    </md-button>
+  </div>
+  </form>
+</md-dialog>

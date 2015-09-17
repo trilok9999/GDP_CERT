@@ -1,0 +1,23 @@
+ /*[{'name':'group','members':[{'fullname':'user1','emailid':'user1@ev.com'},
+                     {'fullname':'user2','emailid':'user2@ev.com'},
+                     {'fullname':'user3','emailid':'user3@ev.com'},
+                     {'fullname':'user4','emailid':'user4@ev.com'},
+                     {'fullname':'user5','emailid':'user5@ev.com'}]},
+                        {'name':'group1','members':[{'fullname':'user1','emailid':'user1@ev.com'},
+                     {'fullname':'user2','emailid':'user2@ev.com'},
+                     {'fullname':'user3','emailid':'user3@ev.com'},
+                     {'fullname':'user4','emailid':'user4@ev.com'},
+                     {'fullname':'user5','emailid':'user5@ev.com'}]}
+                        ]*/
+
+
+                        /*[{'fullname':'user1','emailid':'user1@ev.com'},
+                     {'fullname':'user2','emailid':'user2@ev.com'},
+                     {'fullname':'user3','emailid':'user3@ev.com'},
+                     {'fullname':'user4','emailid':'user4@ev.com'},
+                     {'fullname':'user5','emailid':'user5@ev.com'},
+                     {'fullname':'user6','emailid':'user6@ev.com'},
+                     {'fullname':'user7','emailid':'user7@ev.com'},
+                     {'fullname':'user8','emailid':'user8@ev.com'},
+                     {'fullname':'user9','emailid':'user9@ev.com'},
+                     {'fullname':'user10','emailid':'user10@ev.com'}]*/

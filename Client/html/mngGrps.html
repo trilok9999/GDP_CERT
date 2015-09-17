@@ -1,0 +1,103 @@
+<md-content ng-init="getGroups()" ng-if="$root.menuItemHome">
+  <div layout="column" layout-align="start end">
+    <md-button style="position:fixed;right:2.5%;" class="md-fab  md-primary" ng-click = "$root.menuItemHome=false;$root.edit=true;$root.group={'name':'','members':[]}; getMembers()">
+      <md-tooltip>
+            Create Group
+          </md-tooltip>
+      <i class="material-icons md-36 white">group_add</i>
+    </md-button>
+  </div>
+  <div layout-gt-sm="row" layout-sm="column" layout-wrap layout-margin >
+     <md-card ng-click="$root.menuItemHome=false;$root.group=group;setGrpMembers(group);" flex="30" class="toolbar-item" ng-repeat="group in $root.groups">
+        <!-- <img ng-src="{{imagePath}}" class="md-card-image" alt="Washed Out">-->
+        <md-card-content>
+          <h2 class="md-title">{{group.name}}</h2>
+          <div class="md-actions" layout="row" layout-align="end center">
+              
+          <md-button ng-click="$root.edit=true;$root.menuItemHome=false;$root.group=group;getMembers();" class="md-fab md-primary md-mini">
+              <i class="material-icons white">edit</i>
+            </md-button>
+            <md-button class="md-fab md-primary md-mini" ng-click="deleteGroup(group.groupid,$event)">
+              <i class="material-icons white">delete</i>
+            </md-button>
+          </div>
+        </md-card-content>
+      </md-card>
+  </div>
+</md-content>
+<md-content class="md-padding autocomplete" layout="column" ng-if="!$root.menuItemHome">
+<md-button style="position:fixed; margin-top:-2%;margin-left:-2.5%" class="md-primary" ng-click="$root.menuItemHome=true;$root.edit=false;" ng-if="!$root.menuItemHome">
+<md-tooltip>
+            Back
+          </md-tooltip>
+      <i class="material-icons  md-48">keyboard_backspace</i>
+    </md-button>
+<md-button style="position:fixed;right:2.5%; margin-top:-1.5%" class="md-fab  md-primary" ng-click="$root.edit=true;getMembers();" ng-if="!$root.edit">
+<md-tooltip>
+            Edit Group
+          </md-tooltip>
+      <i class="material-icons md-36 white">edit</i>
+    </md-button>
+    <md-button style="position:fixed;right:2.5%; margin-top:-1.5%" class="md-fab  md-primary" ng-click="$root.edit=false; $root.menuItemHome=true; saveGroup()" ng-if="$root.edit">
+<md-tooltip>
+            Save Group
+          </md-tooltip>
+      <i class="material-icons md-36 white">save</i>
+    </md-button>
+<md-input-container style="margin-top:2%" >
+  <label>Group Name</label>
+  <input ng-required ng-disabled="!$root.edit" ng-model="$root.group.name">
+</md-input-container>
+
+  <md-contact-chips
+        ng-if="$root.edit"
+        ng-model="$root.group.members"
+        md-contacts="$root.querySearch($query)"
+        md-contact-name="fname"
+        md-contact-image="img"
+        md-contact-email="emailid"
+        md-require-match
+        filter-selected="$root.filterSelected"
+        placeholder="Members">
+    </md-contact-chips>
+    <md-list class="fixedRows" ng-if="$root.edit">
+      <md-subheader class="md-no-sticky">Users</md-subheader>
+      <md-list-item class="md-2-line contact-item" ng-repeat="member in $root.members track by $index"
+          ng-if="$root.group.members.indexOf(member) < 0">
+           <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
+        <img ng-src="{{member.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
+        <div class="md-list-item-text compact">
+          <h3>{{member.fname}}</h3>
+          <p>{{member.emailid}}</p>
+        </div>
+      </md-list-item>
+      <md-list-item class="md-2-line contact-item selected" ng-repeat="member in $root.members track by $index" ng-if="$root.group.members.indexOf(member) >= 0">
+       <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
+        <img ng-src="{{member.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
+        <div class="md-list-item-text compact">
+          <h3>{{member.fname}}</h3>
+          <p>{{member.emailid}}</p>
+        </div>
+      </md-list-item>
+    </md-list>
+    <md-list class="fixedRows" ng-if="!$root.edit">
+      <md-subheader class="md-no-sticky">Members</md-subheader>
+      <md-list-item class="md-2-line contact-item" ng-repeat="member in $root.group.members">
+         <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
+        <img ng-src="{{member.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
+        <div class="md-list-item-text compact">
+          <h3>{{member.fname}}</h3>
+          <p>{{member.emailid}}</p>
+        </div>
+      </md-list-item>  
+    </md-list>
+    <!-- {{$root.group}}ng-init="$root.group.leader.userid = $root.group.members===undefined|| $root.group.members.length==0 ||$root.group.leader.userid===undefined? '' : $root.group.leader.userid" -->
+    
+    <md-input-container>
+        <label>Leader</label>
+
+        <md-select ng-disabled="!$root.edit"  ng-model="$root.group.leader.userid">
+          <md-option ng-repeat="member in $root.group.members" value="{{member.userid}}">{{member.fname}}</md-option>
+        </md-select>
+      </md-input-container> 
+</md-content>

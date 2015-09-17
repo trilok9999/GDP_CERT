@@ -1,0 +1,43 @@
+<div layout="row">
+
+	<div layout="column">
+
+	<div layout="row">
+<md-input-container flex>
+	<label>First Name</label>
+	<input  disabled ng-model="$root.curuser.fname">
+</md-input-container>
+<md-input-container flex disabled>
+	<label>Last Name</label>
+	<input  disabled ng-model="$root.curuser.lname">
+</md-input-container>
+</div>
+<!-- <md-input-container>
+	<label>Full Name</label>
+	<input ng-model="$parent.register.fullname">
+</md-input-container> -->
+<md-input-container disabled>
+	<label>Email</label>
+	<input  disabled ng-model="$root.curuser.emailid" type="email">
+</md-input-container>
+<md-input-container disabled>
+	<label>Mobile</label>
+	<input  disabled ng-model="$root.curuser.mobile" type="text">
+</md-input-container>
+
+<md-input-container disabled>
+	<label>Blood Group</label>
+	<input  disabled ng-model="$root.curuser.bloodgrp" type="text">
+</md-input-container>
+
+</div>
+<div flex>
+		<img ng-src="{{$root.curuser.photo}}" class="md-avatar profile-pic"/></div>
+		</div>
+		<md-button class="md-primary md-raised">
+            <span layout="row"  ng-click="$root.activateuser($root.curuser.userid);" layout-align="center center">Approve</span>
+          </md-button>
+          <md-button class="md-primary md-raised">
+            <span layout="row" ng-click="$root.rejectuser($root.curuser.userid);" layout-align="center center">Reject</span>
+          </md-button>
+

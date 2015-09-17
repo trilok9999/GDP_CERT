@@ -1,0 +1,26 @@
+{
+  "name": "cert_client",
+  "version": "0.0.0",
+  "authors": [
+    "s521942 <kumar.challa7893@gmail.com>"
+  ],
+  "description": "cert_acidburn",
+  "main": "index.html",
+  "moduleType": [
+    "es6",
+    "node"
+  ],
+  "license": "MIT",
+  "homepage": "index.html",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5",
+    "angular-google-maps": "~2.2.1"
+  }
+}

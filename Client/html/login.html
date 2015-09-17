@@ -1,0 +1,27 @@
+<md-dialog>
+  <form>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2 class="white">Login</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <i class="material-icons md-36 white">close</i>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content hide-gt-sm style="width:200px;max-height:810px;">
+      <div formtype="loginform"></div>
+  </md-dialog-content>
+    <md-dialog-content hide-md hide-sm style="width:400px;max-height:810px;">
+      <div formtype="loginform"></div>
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+    <md-button  class="md-primary md-raised white" ng-click="mdlogin(user)">
+     Login
+    </md-button>
+    <md-button ng-click="cancel()" style="margin-right:20px;">
+      Cancel
+    </md-button>
+  </div>
+  </form>
+</md-dialog>

@@ -1,0 +1,16 @@
+<div id="chat" schroll-bottom="$root.msg.messages" style="height:60%;overflow-y:auto">
+	<div ng-repeat="message in $root.msg.messages">
+	  <b>{{message.username}} :</b> {{message.messages}}
+	</div>
+</div>
+
+<div layout="row" layout-align="center center">
+<md-input-container flex="80">
+	<label>Message</label>
+	<textarea ng-model="c.msg"></textarea>
+
+
+</md-input-container>
+ <md-button flex ng-click="sendMessage($root.msg.cuser, c.msg)" class="md-primary md-raised" style="margin-top:10px">Send</md-button>
+
+</div>

@@ -1,0 +1,44 @@
+<div layout="row">
+<md-input-container flex>
+	<label>First Name</label>
+	<input ng-model="$parent.register.fname">
+</md-input-container>
+<md-input-container flex>
+	<label>Last Name</label>
+	<input ng-model="$parent.register.lname">
+</md-input-container>
+</div>
+<!-- <md-input-container>
+	<label>Full Name</label>
+	<input ng-model="$parent.register.fullname">
+</md-input-container> -->
+<md-input-container>
+	<label>Email</label>
+	<input ng-model="$parent.register.emailid" type="email">
+</md-input-container>
+<md-input-container>
+	<label>Password</label>
+	<input ng-model="$parent.register.password" type="password">
+</md-input-container>
+<md-input-container>
+	<label>Confirm Password</label>
+	<input ng-model="$parent.register.cpassword" type="password">
+</md-input-container>
+<md-input-container>
+	<label>Mobile</label>
+	<input ng-model="$parent.register.mobile" type="text">
+</md-input-container>
+ <md-input-container>
+        <label>Blood Group</label>
+        <md-select ng-model="$parent.register.bloodgrp">
+          <md-option ng-repeat="bgroup in $root.bgroups" value="{{bgroup}}">{{bgroup}}</md-option>
+        </md-select>
+      </md-input-container> 
+
+<md-input-container>
+	<div ngf-select="" ngf-drop="" ng-model="$root.file" ngf-pattern="pattern" accept="image/*" ngf-capture="capture" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-keep="keep" ngf-keep-distinct="keepDistinct" ngf-allow-dir="allowDir" class="drop-box ng-pristine ng-valid" ngf-drop-available="dropAvailable">
+		<div class="preview">
+          <img ngf-src="!$root.file.$error && $root.file" class=""/>
+        </div>
+    </div>
+</md-input-container>

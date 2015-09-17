@@ -1,0 +1,16 @@
+<div ng-app="serverExe" 
+     ng-controller="someCtrl">
+    <form novalidate="">
+        <textarea style="width: 1000px; height: 500px;" ng-model="results"></textarea><br/>
+        <input type="text"
+               ng-model="query.first"/><br/>
+        <input type="button" value="Search"
+               ng-click="search()"/><br/>
+        <input type="file" on-read-file="displayFileContents(contents)" /><br/>
+    </form>
+</div>
+<script src="angular.min.js"></script>
+<script src="xml2json.min.js"></script>
+<script src="angular-xml.min.js"></script>
+<script src="js.js"></script>
+

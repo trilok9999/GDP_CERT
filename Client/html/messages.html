@@ -1,0 +1,101 @@
+<md-button style="position:fixed;right:2.5%;" class="md-fab  md-primary" ng-click = "toggleSidenav('right')">
+  <md-tooltip>
+       Available Users
+      </md-tooltip>
+  <i class="material-icons md-36 white">people_outline</i>
+</md-button>
+<md-button style="position:fixed;right:7%;" class="md-fab  md-primary" ng-click="showAdvanced('newMessage')">
+  <md-tooltip>
+       New Message
+      </md-tooltip>
+  <i class="material-icons md-36 white">add</i>
+</md-button>
+<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
+
+  <md-toolbar class="md-theme-light">
+    <h1 class="md-toolbar-tools">Available Users</h1>
+  </md-toolbar>
+
+<!-- Rigth Side Nav for Available users -->
+<md-content >
+    <md-list-item class="md-2-line" ng-click="chatuser(user)"  ng-repeat="user in $root.olusers">
+      <img ng-src="{{user.img}}" class="md-avatar" />
+      <div class="md-list-item-text compact">
+        <h3>{{user.fname}}</h3>
+      </div>
+    </md-list-item>
+  </md-content>
+</md-sidenav>
+
+
+
+<div layout-gt-md="row" ng-if="$root.menuItemHome">
+  <md-content ng-init="$root.getMessages()" flex="35" hide-md hide-sm>
+    <md-list-item ng-class = "{'selectedListItem':$root.msg.messageid===message.messageid}" class="md-2-line" ng-click="$root.msg = message" ng-repeat="message in $root.messages  | orderBy : '-lastupdated' track by $index ">
+             <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
+             
+          <img ng-src="./{{message.cuser.userid}}.jpg" class="md-avatar"/>
+          <div class="md-list-item-text compact">
+           <h3>{{message.cuser.username}}</h3>
+           <div ng-repeat="msg in message.messages track by $index">
+             <span ng-show="$last">{{msg.messages}}</span>
+          </div>
+           <!-- <p>{{member.emailid}}</p> -->
+          </div>
+      </md-list-item>
+  </md-content>
+  <md-content flex hide-md hide-sm ng-init = "$root.msg">
+
+    <message></message>
+  
+  </md-content>
+
+  <!-- <md-content ng-init="getPendingMembers();" flex="35" hide-gt-md>
+    <md-list-item ng-click="$root.getuser(member.userid);$root.menuItemHome=!$root.menuItemHome" class="md-2-line" ng-repeat="member in $root.pendingmembers track by $index">
+          <img ng-src="{{member.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
+          <div class="md-list-item-text compact">
+            <h3>{{member.fname}}</h3>
+            <p>{{member.emailid}}</p>
+          </div>
+          <md-button class="md-primary">
+            <span layout="row" ng-click="$root.activateuser(member.userid);" layout-align="center center">Approve</span>
+          </md-button>
+      </md-list-item>
+  </md-content>
+  <md-content flex hide-md hide-sm ng-init = "$root.curuser={};">
+
+    <profile></profile>
+  
+  </md-content>
+  
+</div>
+ -->
+
+<!-- chat windows -->
+<!-- <div layout="row"  layout-align="end end" style="height: 75%;">
+<div class="cwindow" ng-repeat="chat in $root.chatusers">
+  <md-toolbar style="min-height:30px;height:30px">
+    <div class="md-toolbar-tools cheader">
+      <h2 class="white">{{chat.cuser.username}}</h2>
+      <span flex></span>
+      	<md-button class="md-icon-button">
+        <i class="material-icons md-24 white">close</i>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+      <div class="cbody"  style="height:235px;padding:5px">
+        <div ng-repeat="msg in chat.messages">
+          <b>{{msg.username}} :</b> {{msg.messages}}
+        </div>
+      </div>
+  </md-dialog-content>
+    
+  <div class="md-actions" layout="row">
+  	 <input type="text" ng-model="cuser.msg">
+    <button style="width: 67px;height: 26px;" ng-click="sendMessage(chat.cuser, cuser.msg)">
+     Send
+    </button>
+  </div>
+</div>
+</div>
