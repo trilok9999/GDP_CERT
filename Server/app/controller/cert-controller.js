@@ -182,6 +182,13 @@ module.exports.getIncedents = function(req, res){
 	mongoDB.collection('INCEDENTS', function(err, coll) {
 		coll.find({},{_id:0}).toArray(function(err, items) {
 			if(!err){
+				items.forEach(function(incident){
+					incident['id']=incident.incedentid;
+					var templocation=incident.location;
+					templocation.latitude=parseFloat(templocation.latitude);
+					templocation.longitude=parseFloat(templocation.longitude);
+					incident.location=templocation;
+				});
 				res.send({"success":true,'incedents':items});
 			}else{
 				res.send({"success":false,'incedents':[]});

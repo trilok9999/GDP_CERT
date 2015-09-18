@@ -25,12 +25,12 @@
 <div layout="row" >
       <md-input-container flex>
         <label>Location Latitude</label>
-        <input ng-model="$root.curincident.location.latitude">
+        <input name="lat" ng-model="$root.curincident.location.latitude" nks-only-number decimal-upto="5">
           
       </md-input-container>
       <md-input-container flex>
         <label>Location Longitude</label>
-        <input ng-model="$root.curincident.location.longitude">
+        <input name="long" ng-model="$root.curincident.location.longitude" nks-only-number decimal-upto="5">
           
       </md-input-container>
 
