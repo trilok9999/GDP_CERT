@@ -5,7 +5,15 @@
 
     <!--</ui-gmap-google-map>-->
     <ui-gmap-google-map class="col-md-12 row" layout="column" center="map.center" zoom="map.zoom" draggable="true">
-        <ui-gmap-markers models="incidentArray" coords="'location'" icon="'icon'">
+        <ui-gmap-markers models="incidentArray" coords="'location'" icon='{url : "./images/Fire.svg"}'>
+            <ui-gmap-windows show="show">
+                <div ng-non-bindable>
+                    <div class="col-md-12"><b>Name: {{name}}</b></div>
+                    <div class="col-md-12"><b>Team: {{groups[0].name}}</b></div>
+                </div>
+                <!--<div ng-repeat="team in groups" ng-non-bindable><b>Team: {{team.name}}</b></div>-->
+
+            </ui-gmap-windows>
         </ui-gmap-markers>
     </ui-gmap-google-map>
 </section>
