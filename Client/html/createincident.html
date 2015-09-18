@@ -51,7 +51,7 @@
       <md-list-item class="md-2-line contact-item" ng-repeat="group in $root.groupsforincident track by $index"
           ng-if="$root.curincident.groups.indexOf(group) < 0">
            <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
-        <img ng-src="{{group.leader.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
+        <img ng-src="./images/{{group.leader.userid}}.png" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
         <div class="md-list-item-text compact">
           <h3>{{group.name}}</h3>
           <p>{{group.leader.fname}}</p>
@@ -59,7 +59,7 @@
       </md-list-item>
       <md-list-item class="md-2-line contact-item selected" ng-repeat="group in $root.groupsforincident track by $index" ng-if="$root.curincident.groups.indexOf(group) >= 0">
        <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
-        <img ng-src="{{group.leader.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
+        <img ng-src="./images/{{group.leader.userid}}.png" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
         <div class="md-list-item-text compact">
           <h3>{{group.name}}</h3>
           <p>{{group.leader.fname}}</p>
