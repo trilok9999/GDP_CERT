@@ -30,7 +30,15 @@ myApp.controller('certContrl',function($scope, uiGmapGoogleMapApi,$http){
         $scope.map = { center: { latitude: 40.35245, longitude:-94.8822529999999}, zoom: 8 };
 
 
-        $http.get("http://localhost:1000/getIncedents").success(function (response) {$scope.incidentArray = response.incedents;});
+        $http.get("http://localhost:1000/getIncedents").success(function (response) {
+            response.incedents.forEach(function(incident){
+                incident['icon']="./images/"+incident.type+".png";
+            });
+
+            $scope.incidentArray = response.incedents;
+
+
+        });
 
 
 
@@ -297,7 +305,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
           ////alert('in success')
           delete response.success;
           $rootScope.groupsforincident= response.groups;
-          $rootScope.incidenttypes = ['Water', 'Fire', 'Electricity', 'Natural', 'Other'];
+          $rootScope.incidenttypes = ['Water', 'Fire', 'Electricity', 'Natural'];
           /////alert(JSON.stringify($rootScope.groupsforincident));
         }
       }).error(function(data){
