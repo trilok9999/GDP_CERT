@@ -305,7 +305,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
           ////alert('in success')
           delete response.success;
           $rootScope.groupsforincident= response.groups;
-          $rootScope.incidenttypes = ['Water', 'Fire', 'Electricity', 'Natural'];
+          $rootScope.incidenttypes = ['Water', 'Fire', 'Electricity', 'Tornado'];
           /////alert(JSON.stringify($rootScope.groupsforincident));
         }
       }).error(function(data){
