@@ -1,6 +1,6 @@
 <div ng-if="$root.menuItemHome">
 
-    <md-content layout="row" ng-if="!$root.createIncident" ng-init="getAllIncidents()">
+    <md-content flex="100" layout="row" ng-if="!$root.createIncident" ng-init="getAllIncidents()">
 
         <md-list-item flex ng-init="$first?getincidentwall(incident):''" ng-class = "{'selectedListItem':getSelectedIncident()===incident.incedentid}" ng-click=" getincidentwall(incident);" class="md-2-line" ng-repeat="incident in $root.incidents | orderBy : ['status','-createDate'] | filter:{'status':status} track by $index">
             <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
@@ -8,7 +8,7 @@
                 <h3>{{incident.name}}</h3>
                 <p style="color:darkgrey">{{incident.status==='A'?'Active':'Closed'}}</p>
             </div>
-
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
         </md-list-item>
     </md-content>
     <md-content flex style="height:75%" ng-if="!$root.createIncident && $root.incidents.length>0">
