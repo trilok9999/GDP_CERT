@@ -1,6 +1,6 @@
 <div layout="row" ng-controller="certContrl">
-<md-content ng-init="getAllIncidents()" flex="35">
-    <md-list-item class="md-2-line" ng-repeat="incident in $root.incidents | orderBy : ['status','-createDate'] | filter:{'status':status} track by $index">
+    <md-content flex="35">
+    <md-list-item ng-click="c()" class="md-2-line" ng-repeat="incident in incidentArray">
         <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
         <div class="md-list-item-text compact">
             <h3>{{incident.name}}</h3>
