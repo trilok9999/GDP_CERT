@@ -1,28 +1,29 @@
-
 {
   "name": "CERT",
   "description": "CERT",
   "author": "Satya Madala",
-  "contributors": [{
-  "name": "Mr.X",
-  "email": "email@email.com"
-}],
+  "contributors": [
+    {
+      "name": "Mr.X",
+      "email": "email@email.com"
+    }
+  ],
   "main": "server.js",
   "keywords": [
-  "CERT"
-],
+    "CERT"
+  ],
   "dependencies": {
-    "async": "~0.8.0",
+    "async": "^1.4.2",
+    "body-parser": "^1.13.3",
+    "connect-mongo": "^0.8.2",
+    "connect-multiparty": "^2.0.0",
+    "cookie-parser": "^1.3.5",
     "express": "4.2.x",
-    "mongodb":"2.0.40",
-    "connect-mongo":"^0.8.2",
-    "express-session":"^1.11.3",
+    "express-session": "^1.11.3",
+    "jade": "^1.11.0",
+    "mongodb": "2.0.40",
+    "multer": "^1.0.3",
     "socket.io": "^1.3.6",
-    "uuid": "^2.0.1",
-    "cookie-parser":"^1.3.5",
-    "body-parser":"^1.13.3",
-    "multer":"^1.0.3",
-    "connect-multiparty":"^2.0.0",
-    "async":"^1.4.2"
+    "uuid": "^2.0.1"
   }
 }

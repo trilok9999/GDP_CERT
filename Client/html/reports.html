@@ -1,25 +1,12 @@
-<div ng-if="$root.menuItemHome">
+<div layout="row" ng-controller="certContrl">
+<md-content ng-init="getAllIncidents()" flex="35">
+    <md-list-item class="md-2-line" ng-repeat="incident in $root.incidents | orderBy : ['status','-createDate'] | filter:{'status':status} track by $index">
+        <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
+        <div class="md-list-item-text compact">
+            <h3>{{incident.name}}</h3>
+            <p style="color:darkgrey">{{incident.status==='A'?'Active':'Closed'}}</p>
+        </div>
 
-    <md-content flex="100" layout="row" ng-if="!$root.createIncident" ng-init="getAllIncidents()">
-
-        <md-list-item flex ng-init="$first?getincidentwall(incident):''" ng-class = "{'selectedListItem':getSelectedIncident()===incident.incedentid}" ng-click=" getincidentwall(incident);" class="md-2-line" ng-repeat="incident in $root.incidents | orderBy : ['status','-createDate'] | filter:{'status':status} track by $index">
-            <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
-            <div class="md-list-item-text compact">
-                <h3>{{incident.name}}</h3>
-                <p style="color:darkgrey">{{incident.status==='A'?'Active':'Closed'}}</p>
-            </div>
-            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-        </md-list-item>
-    </md-content>
-    <md-content flex style="height:75%" ng-if="!$root.createIncident && $root.incidents.length>0">
-
-
-
-    <!--</md-content>-->
-    <!--<md-content flex ng-init = "$root.curincident={'name':'','type':'',groups:[],location:{}};" ng-if="$root.createIncident">-->
-
-        <!--<create-incident></create-incident>-->
-
-    <!--</md-content>-->
-
+    </md-list-item>
+</md-content>
 </div>
