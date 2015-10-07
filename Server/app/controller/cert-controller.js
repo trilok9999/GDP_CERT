@@ -6,7 +6,7 @@ Db = mongo.Db;
 var multer = require('multer');
 var fs = require('fs');
 var upload = multer({ dest: '../../Client/images/' });
-
+var phantom = require('phantom');
 var server = new Server('localhost', 27017, {auto_reconnect: true});
 var db = new Db('CERT', server);
 var async = require("async");
@@ -521,6 +521,9 @@ module.exports.getmessage = function(req, res){
 	});
 }
 
+module.exports.getTest=function(req,res){
+	res.render('test1');
+}
 
 function findIndexByKeyValue(arraytosearch, key, valuetosearch) {    
     for (var i = 0; i < arraytosearch.length; i++) {

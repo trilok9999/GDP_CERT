@@ -44,7 +44,8 @@ app.use(multipart({
 app.use("/myapp",express.static(path.join(__dirname, "../Client")));
 app.use("/xml",express.static(path.join(__dirname, "../Client/xmlfileupload")));
 app.use('/myapp',express.static(path.join(__dirname, './images')));
-
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 var sess;
 
 require('./app/router/cert-router.js')(app);
