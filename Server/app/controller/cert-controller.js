@@ -4,6 +4,7 @@ var uuid = require('uuid'),
   	Server = mongo.Server,
 Db = mongo.Db;
 var pdfDoc=require('pdfkit');
+var geocoder = require('geocoder');
 var multer = require('multer');
 var url = require('url');
 var fs = require('fs');
@@ -524,37 +525,43 @@ module.exports.getmessage = function(req, res){
 }
 
 module.exports.getPdf=function(req,res){
-	var doc = new pdfDoc(),firstTag = true;
-
+	var doc = new pdfDoc();
 	mongoDB.collection('INCEDENTS', function(err, coll) {
 		coll.find({"name":req.query.name}).toArray(function(err, items) {
 			if(!err){
 				items.forEach(function(incident){
-					incident['id']=incident.incedentid;
 					var templocation=incident.location;
 					templocation.latitude=parseFloat(templocation.latitude);
 					templocation.longitude=parseFloat(templocation.longitude);
 					incident.location=templocation;
-					if (firstTag) {// First page is automatically created
-						firstTag = false;
-					} else {// The rest must be added
-						doc.addPage();
-					}
-					doc.fontSize(40).text(incident.name);
+
+					doc.fontSize(35).fillColor("blue").text(incident.name.toUpperCase(),{align :'center',underline:'true'});
+					doc.fontSize(20).text("Teams:",{underline:'true'});
 					incident.groups.forEach(function(group){
-						doc.fontSize(20).text(group.name);
+						doc.fontSize(14).fillColor("black").text(group.name);
+						doc.fontSize(20).fillColor("blue").text("Team Members:",{underline:'true'});
 						group.members.forEach(function(member){
-							doc.fontSize(20).text(member.fname+" "+member.lname);
+							doc.fontSize(14).fillColor("black").text(member.fname+" "+member.lname);
 						});
 					});
-					doc.fontSize(20).text(incident.type);
+					doc.fontSize(20).fillColor("blue").text("Incident Type:",{underline:'true'});
+					doc.fontSize(14).fillColor("black").text(incident.type);
+
+					geocoder.reverseGeocode(33.7489,-84.3789,function ( err, data ) {
+						if(data) {
+							doc.fontSize(20).fillColor("blue").text(data.formatted_address, {underline: 'true'});
+							doc.pipe(res);
+
+							doc.end();
+						}
+					});
 
 				});
 
 
-				doc.pipe(res);
-
-				doc.end();
+				//doc.pipe(res);
+                //
+				//doc.end();
 			}else{
 				res.send({"success":false,'incedents':[]});
 			}
