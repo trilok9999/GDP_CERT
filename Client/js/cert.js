@@ -24,7 +24,7 @@ myApp.config(function(uiGmapGoogleMapApiProvider) {
     });
 });
 //controller for maps
-myApp.controller('certContrl',function($scope, uiGmapGoogleMapApi,$http){
+myApp.controller('certContrl',function($scope, uiGmapGoogleMapApi,$http,$window){
     uiGmapGoogleMapApi.then(function(maps) {
 
         $scope.map = { center: { latitude: 40.35245, longitude:-94.8822529999999}, zoom: 8 };
@@ -38,8 +38,18 @@ myApp.controller('certContrl',function($scope, uiGmapGoogleMapApi,$http){
             $scope.incidentArray = response.incedents;
 
 
+
         });
 
+        $scope.generatePDF=function(incident){
+            var myPdfUrl = 'http://localhost:1000/pdf?name='+incident.name+'';
+            $window.open(myPdfUrl);
+            //$http.get(myPdfUrl)
+            //    .success(function(data){
+            //        //data is link to pdf
+            //        $window.open(data);
+            //    });
+        };
 
 
 

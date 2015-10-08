@@ -3,10 +3,12 @@ var uuid = require('uuid'),
 	mongo = require('mongodb'),
   	Server = mongo.Server,
 Db = mongo.Db;
+var pdfDoc=require('pdfkit');
 var multer = require('multer');
+var url = require('url');
 var fs = require('fs');
 var upload = multer({ dest: '../../Client/images/' });
-var phantom = require('phantom');
+//var phantom = require('phantom');
 var server = new Server('localhost', 27017, {auto_reconnect: true});
 var db = new Db('CERT', server);
 var async = require("async");
@@ -521,8 +523,44 @@ module.exports.getmessage = function(req, res){
 	});
 }
 
-module.exports.getTest=function(req,res){
-	res.render('test1');
+module.exports.getPdf=function(req,res){
+	var doc = new pdfDoc(),firstTag = true;
+
+	mongoDB.collection('INCEDENTS', function(err, coll) {
+		coll.find({"name":req.query.name}).toArray(function(err, items) {
+			if(!err){
+				items.forEach(function(incident){
+					incident['id']=incident.incedentid;
+					var templocation=incident.location;
+					templocation.latitude=parseFloat(templocation.latitude);
+					templocation.longitude=parseFloat(templocation.longitude);
+					incident.location=templocation;
+					if (firstTag) {// First page is automatically created
+						firstTag = false;
+					} else {// The rest must be added
+						doc.addPage();
+					}
+					doc.fontSize(40).text(incident.name);
+					incident.groups.forEach(function(group){
+						doc.fontSize(20).text(group.name);
+						group.members.forEach(function(member){
+							doc.fontSize(20).text(member.fname+" "+member.lname);
+						});
+					});
+					doc.fontSize(20).text(incident.type);
+
+				});
+
+
+				doc.pipe(res);
+
+				doc.end();
+			}else{
+				res.send({"success":false,'incedents':[]});
+			}
+		});
+	});
+
 }
 
 function findIndexByKeyValue(arraytosearch, key, valuetosearch) {    

@@ -1,6 +1,6 @@
 <div layout="row" ng-controller="certContrl">
     <md-content flex="35">
-    <md-list-item ng-click="c()" class="md-2-line" ng-repeat="incident in incidentArray">
+    <md-list-item class="md-2-line" ng-repeat="incident in incidentArray" ng-click="generatePDF(incident)">
         <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
         <div class="md-list-item-text compact">
             <h3>{{incident.name}}</h3>
