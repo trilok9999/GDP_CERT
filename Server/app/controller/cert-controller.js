@@ -550,10 +550,14 @@ module.exports.getPdf=function(req,res){
 					geocoder.reverseGeocode(33.7489,-84.3789,function ( err, data ) {
 						if(data) {
 							doc.fontSize(20).fillColor("blue").text(data.formatted_address, {underline: 'true'});
+						}
+						else{
+							doc.fontSize(20).fillColor("blue").text(templocation, {underline: 'true'})
+						}
 							doc.pipe(res);
 
 							doc.end();
-						}
+
 					});
 
 				});
