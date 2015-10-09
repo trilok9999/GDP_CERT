@@ -59,7 +59,7 @@ myApp.controller('certController',certController);
 
 
 
-function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog, $http, Upload, $filter, $mdMedia, socket) {
+function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog, $http, Upload, $filter, $mdMedia, socket,verifyDelete,Success) {
  
   $scope.flag = "home";
   $scope.ulog = true;
@@ -165,7 +165,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
           $rootScope.onlineusers();
           $rootScope.getMessages();
           $scope.menuitems = [{'title':'HOME','id':'home'},
-                        {'title':'MESSGAES','id':'messages'},
+                        {'title':'MESSAGES','id':'messages'},
                         {'title':'PENDING REQUESTS','id':'pndngreqs'},
                         {'title':'MANAGE GROUPS','id':'mnggrps'},
                         {'title':'INCIDENTS','id':'incidents'},
@@ -193,6 +193,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
    };
   $rootScope.loginCheck();              
   $rootScope.register = function (user) {
+
     if(user.password===user.cpassword){
         delete user.cpassword;
         if (!$rootScope.file.$error) {
@@ -391,23 +392,29 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
         }
      });
    };
-   $rootScope.rejectuser = function (userid) {
-     $http.post('http://localhost:1000/rejectuser', JSON.stringify({'userid':userid})).success(function (data) {
-        if(data.success){
-          $scope.getPendingMembers();
+    $rootScope.rejectuser = function (userid) {
+        verifyDelete(userid).then(function (selectedItem) {
+            $http.post('http://localhost:1000/rejectuser', JSON.stringify({'userid': userid})).success(function (data) {
+                if (data.success) {
+                    $scope.getPendingMembers();
+                }
+            });
+        }), function (cancel) {
+        };
+    }
+    $scope.deleteGroup = function (groupid,event) {
+        event.preventDefault();
+        event.stopPropagation();
+        verifyDelete(event).then(function(selectedItem){
+
+            $http.post('http://localhost:1000/deletegroup', JSON.stringify({'groupid':groupid})).success(function (data) {
+                if(data.success){
+                    $scope.getGroups();
+                }
+            });
+        }),function(cancel){
         }
-     });
-   };
-   $scope.deleteGroup = function (groupid,event) {
-    
-    event.preventDefault();
-    event.stopPropagation();
-     $http.post('http://localhost:1000/deletegroup', JSON.stringify({'groupid':groupid})).success(function (data) {
-        if(data.success){
-         $scope.getGroups();
-        }
-     });
-   };
+    };
 
   $scope.$watch(function() {
     return $rootScope.pendingmembers;
@@ -601,7 +608,7 @@ $rootScope.findIndexByKeyValue = function (arraytosearch, key, valuetosearch) {
 
 
   
-function DialogController($scope, $rootScope, $mdDialog) {
+function DialogController($scope, $rootScope, $mdDialog,Success) {
 
   //$scope.cgformtitle = $rootScope.cgformtitle;
   //$scope.cgformid =  $rootScope.cgformid;
@@ -612,8 +619,14 @@ function DialogController($scope, $rootScope, $mdDialog) {
     $mdDialog.cancel();
   };
   $scope.mdRegister = function(user) {
-    $rootScope.register(user);
-    $mdDialog.cancel();
+
+      Success(user).then(function(selecteditem){
+          $rootScope.register(user);
+          $mdDialog.cancel();
+      }),function(cancel){
+
+      }
+
   };
 $scope.mdMsgSend = function(users, message) {
     $rootScope.newMessage(users,message);
@@ -652,7 +665,48 @@ $scope.mdMsgSend = function(users, message) {
      }
    } 
 });*/
+myApp.factory('verifyDelete', function($mdDialog) {
+    return function(user) {
+        var confirm = $mdDialog.confirm()
+            .title('Confirm Delete')
+            .content('Are you sure you want to delete ?')
+            .ariaLabel('Delete User')
+            .ok('Delete')
+            .cancel('Cancel');
+        return $mdDialog.show(confirm);
+    }
+})
+myApp.factory('Success', function($mdDialog) {
+    return function(user) {
+        var success = $mdDialog.confirm()
+.title('Registration Success')
 
+
+            .ok('OK')
+
+        return $mdDialog.show(success);
+    }
+})
+var compareTo = function() {
+    return {
+        require: "ngModel",
+        scope: {
+            otherModelValue: "=compareTo"
+        },
+        link: function(scope, element, attributes, ngModel) {
+
+            ngModel.$validators.compareTo = function(modelValue) {
+                return modelValue == scope.otherModelValue;
+            };
+
+            scope.$watch("otherModelValue", function() {
+                ngModel.$validate();
+            });
+        }
+    };
+};
+
+myApp.directive("compareTo", compareTo);
 myApp.directive('createIncident', function() {
   return {
     restrict: 'E',
