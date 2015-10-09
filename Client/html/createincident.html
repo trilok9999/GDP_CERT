@@ -21,7 +21,11 @@
         <md-select ng-model="$root.curincident.type">
           <md-option ng-repeat="type in $root.incidenttypes" value="{{type}}">{{type}}</md-option>
         </md-select>
-      </md-input-container> 
+      </md-input-container>
+    <md-input-container flex>
+        <label>Address</label>
+        <input type="text" id="Autocomplete" class="form-control" ng-autocomplete="result1" details="details1" options="options1"/>
+    </md-input-container>
 <div layout="row" >
       <md-input-container flex>
         <label>Location Latitude</label>
@@ -31,9 +35,7 @@
       <md-input-container flex>
         <label>Location Longitude</label>
         <input name="long" ng-model="$root.curincident.location.longitude" nks-only-number decimal-upto="5">
-          
       </md-input-container>
-
 </div>
 
   <md-contact-chips
