@@ -138,7 +138,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
           $rootScope.onlineusers();
           $rootScope.getMessages();
           $scope.menuitems = [{'title':'HOME','id':'home'},
-                        {'title':'MESSGAES','id':'messages'},
+                        {'title':'MESSAGES','id':'messages'},
                         {'title':'PENDING REQUESTS','id':'pndngreqs'},
                         {'title':'MANAGE GROUPS','id':'mnggrps'},
                         {'title':'INCIDENTS','id':'incidents'},
@@ -486,7 +486,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
     $rootScope.createFilterFor = function(query) {
       var lowercaseQuery = angular.lowercase(query);
       return function filterFn(member) {
-        return ((angular.lowercase(member.fname)).indexOf(lowercaseQuery) != -1);;
+        return ((angular.lowercase(member.fname+" "+member.lname)).indexOf(lowercaseQuery) != -1);;
       };
     }
 
@@ -665,6 +665,30 @@ $scope.mdMsgSend = function(users, message) {
      }
    } 
 });*/
+myApp.directive('geocoder',function($scope,$window,$rootScope){
+    return{
+        restrict:'A',
+        scope:{
+           address:"="
+        },
+        link:function(scope,el,attr){
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode( { "address": $rootScope.result1 }, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK && results.length > 0) {
+                    var location = results[0].geometry.location,
+                        lat      = location.lat(),
+                        lng      = location.lng();
+                    $window.alert("Latitude: ");
+                    alert("Longitude: " + lng);
+
+                }
+            });
+        },
+        replace:"true"
+
+    }
+
+})
 myApp.factory('verifyDelete', function($mdDialog) {
     return function(user) {
         var confirm = $mdDialog.confirm()
