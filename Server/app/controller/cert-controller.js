@@ -546,15 +546,22 @@ module.exports.getPdf=function(req,res){
 					});
 					doc.fontSize(20).fillColor("blue").text("Incident Type:",{underline:'true'});
 					doc.fontSize(14).fillColor("black").text(incident.type);
-
-					geocoder.reverseGeocode(33.7489,-84.3789,function ( err, data ) {
-						if(data) {
-							doc.fontSize(20).fillColor("blue").text(data.formatted_address, {underline: 'true'});
-							doc.pipe(res);
-
-							doc.end();
-						}
-					});
+					doc.fontSize(20).fillColor("blue").text("Location", {underline: 'true'});
+					doc.fontSize(20).fillColor("black").text("Compton,NY");
+					doc.pipe(res);
+					doc.end();
+					//geocoder.reverseGeocode(33.7489,-84.3789,function ( err, data ) {
+					//	if(data) {
+					//		doc.fontSize(20).fillColor("blue").text(data.formatted_address, {underline: 'true'});
+					//	}
+					//	else{
+					//		doc.fontSize(20).fillColor("blue").text(templocation, {underline: 'true'})
+					//	}
+					//		doc.pipe(res);
+                    //
+					//		doc.end();
+                    //
+					//});
 
 				});
 

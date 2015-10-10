@@ -1,28 +1,84 @@
 <md-dialog>
-  <form>
-  <md-toolbar>
-    <div class="md-toolbar-tools">
-      <h2 class="white"> Registration</h2>
-      <span flex></span>
-      <md-button class="md-icon-button" ng-click="cancel()">
-        <i class="material-icons md-36 white">close</i>
+  <form name="registration">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2 class="white" ng-show="!verify"> Registration</h2>
+        <h5 ng-show="verify">Registration not successful</h5>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <i class="material-icons md-36 white">close</i>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content hide-md hide-sm style="width:400px;max-height:810px; ">
+
+      <div layout="row">
+
+        <md-input-container flex>
+
+          <label>First Name</label>
+          <input type="text" ng-model="register.fname" name="name" ng-required="true">
+          <p ng-show="registration.name.$invalid && !registration.name.$pristine" class="help-block" style="color: red">Your first name is required.</p>
+        </md-input-container>
+        <md-input-container flex>
+          <label>Last Name</label>
+          <input type="text" ng-model="register.lname" name="lname" ng-required="true">
+          <p ng-show="registration.lname.$invalid && !registration.lname.$pristine" class="help-block" style="color: red">Your last name is required.</p>
+        </md-input-container>
+      </div>
+      <md-input-container>
+        <label>Email</label>
+        <input ng-model="register.emailid" type="email" name="email" ng-required="true">
+        <p ng-show="registration.email.$invalid && registration.email.$touched" class="help-block" style="color: red">Please enter a valid Email</p>
+      </md-input-container>
+      <md-input-container>
+        <label>Password</label>
+        <input ng-model="register.password" type="password" name="password" ng-minlength="6" ng-required="true">
+        <p ng-show="registration.password.$error.minlength" class="help-block">Your password is too short.</p>
+      </md-input-container>
+      <md-input-container>
+        <label>Confirm Password</label>
+        <input ng-model="register.cpassword" type="password" name="passwordconfirm" required="true" compare-to="register.password">
+      </md-input-container>
+
+
+      <md-input-container>
+        <label>Mobile</label>
+        <input ng-model="register.mobile" type="tel" ng-minlength="10" name="mobile" pattern="^\d{10}$" required>
+        <p ng-show="registration.mobile.$invalid && registration.mobile.$touched" class="help-block">Please enter a valid number.</p>
+      </md-input-container>
+      <md-input-container>
+        <label>County Name</label>
+        <input ng-model="register.county" type="text" required>
+      </md-input-container>
+      <md-input-container>
+        <label>Blood Group</label>
+        <md-select ng-model="register.bloodgrp">
+          <md-option ng-repeat="bgroup in $root.bgroups" value="{{bgroup}}">{{bgroup}}</md-option>
+        </md-select>
+      </md-input-container>
+
+      <form>
+        <div ngf-select="" ngf-drop="" ng-model="$root.file" ngf-pattern="pattern" accept="image/*" ngf-capture="capture" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-keep="keep" ngf-keep-distinct="keepDistinct" ngf-allow-dir="allowDir" class="drop-box ng-pristine ng-valid" ngf-drop-available="dropAvailable" ng-required="true">
+          <div class="preview">
+            <img ngf-src="!$root.file.$error && $root.file" class=""/>
+          </div>
+        </div>
+      </form>
+
+      </md-input-container>
+
+    </md-dialog-content>
+    <md-dialog-content hide-gt-sm  style="width:200px;max-height:810px; ">
+      <div formtype="registrationform"></div>
+    </md-dialog-content>
+    <div class="md-actions" layout="row">
+      <md-button  class="md-primary md-raised white" ng-click="mdRegister(register)" ng-disabled="registration.$invalid" >
+        Register
+      </md-button>
+      <md-button ng-click="cancel()" style="margin-right:20px;">
+        Cancel
       </md-button>
     </div>
-  </md-toolbar>
-  <md-dialog-content hide-md hide-sm style="width:400px;max-height:810px; ">
-    <div formtype="registrationform"></div>
-    
-  </md-dialog-content>
-   <md-dialog-content hide-gt-sm  style="width:200px;max-height:810px; ">
-    <div formtype="registrationform"></div>
-  </md-dialog-content>
-  <div class="md-actions" layout="row">
-    <md-button  class="md-primary md-raised white" ng-click="mdRegister(register)">
-     Register
-    </md-button>
-    <md-button ng-click="cancel()" style="margin-right:20px;">
-      Cancel
-    </md-button>
-  </div>
   </form>
 </md-dialog>

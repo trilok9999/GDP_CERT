@@ -67,7 +67,7 @@
            <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
         <img ng-src="{{member.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
         <div class="md-list-item-text compact">
-          <h3>{{member.fname}}</h3>
+          <h3>{{member.fname+" "+member.lname}}</h3>
           <p>{{member.emailid}}</p>
         </div>
       </md-list-item>
@@ -75,7 +75,7 @@
        <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
         <img ng-src="{{member.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
         <div class="md-list-item-text compact">
-          <h3>{{member.fname}}</h3>
+          <h3>{{member.fname+" "+member.lname}}</h3>
           <p>{{member.emailid}}</p>
         </div>
       </md-list-item>
@@ -86,7 +86,7 @@
          <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
         <img ng-src="{{member.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
         <div class="md-list-item-text compact">
-          <h3>{{member.fname}}</h3>
+          <h3>{{member.fname+" "+member.lname}}</h3>
           <p>{{member.emailid}}</p>
         </div>
       </md-list-item>  
@@ -97,7 +97,7 @@
         <label>Leader</label>
 
         <md-select ng-disabled="!$root.edit"  ng-model="$root.group.leader.userid">
-          <md-option ng-repeat="member in $root.group.members" value="{{member.userid}}">{{member.fname}}</md-option>
+          <md-option ng-repeat="member in $root.group.members" value="{{member.userid}}">{{member.fname+" "+member.lname}}</md-option>
         </md-select>
       </md-input-container> 
 </md-content>

@@ -1,5 +1,4 @@
-var myApp = angular.module('myApp',['ngMaterial', 'ngAria', 'ngAnimate','ngFileUpload','uiGmapgoogle-maps']);
-
+var myApp = angular.module('myApp',['ngMaterial', 'ngAria', 'ngAnimate','ngFileUpload','uiGmapgoogle-maps', 'ngAutocomplete']);
 
 myApp.config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
@@ -60,7 +59,7 @@ myApp.controller('certController',certController);
 
 
 
-function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog, $http, Upload, $filter, $mdMedia, socket) {
+function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog, $http, Upload, $filter, $mdMedia, socket,verifyDelete,Success) {
  
   $scope.flag = "home";
   $scope.ulog = true;
@@ -74,7 +73,9 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
   $rootScope.members = [];
   $scope.user={};
   $rootScope.mdMedia=$mdMedia;
-
+    $rootScope.result1 = '';
+    $rootScope.options1 = null;
+    $rootScope.details1 = '';
   $scope.setGrpMembers = function(group){
     var dupeUserIndexes = [];
     for(var j=0;j<group.members.length;j++){
@@ -137,7 +138,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
           $rootScope.onlineusers();
           $rootScope.getMessages();
           $scope.menuitems = [{'title':'HOME','id':'home'},
-                        {'title':'MESSGAES','id':'messages'},
+                        {'title':'MESSAGES','id':'messages'},
                         {'title':'PENDING REQUESTS','id':'pndngreqs'},
                         {'title':'MANAGE GROUPS','id':'mnggrps'},
                         {'title':'INCIDENTS','id':'incidents'},
@@ -164,7 +165,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
           $rootScope.onlineusers();
           $rootScope.getMessages();
           $scope.menuitems = [{'title':'HOME','id':'home'},
-                        {'title':'MESSGAES','id':'messages'},
+                        {'title':'MESSAGES','id':'messages'},
                         {'title':'PENDING REQUESTS','id':'pndngreqs'},
                         {'title':'MANAGE GROUPS','id':'mnggrps'},
                         {'title':'INCIDENTS','id':'incidents'},
@@ -192,6 +193,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
    };
   $rootScope.loginCheck();              
   $rootScope.register = function (user) {
+
     if(user.password===user.cpassword){
         delete user.cpassword;
         if (!$rootScope.file.$error) {
@@ -390,23 +392,29 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
         }
      });
    };
-   $rootScope.rejectuser = function (userid) {
-     $http.post('http://localhost:1000/rejectuser', JSON.stringify({'userid':userid})).success(function (data) {
-        if(data.success){
-          $scope.getPendingMembers();
+    $rootScope.rejectuser = function (userid) {
+        verifyDelete(userid).then(function (selectedItem) {
+            $http.post('http://localhost:1000/rejectuser', JSON.stringify({'userid': userid})).success(function (data) {
+                if (data.success) {
+                    $scope.getPendingMembers();
+                }
+            });
+        }), function (cancel) {
+        };
+    }
+    $scope.deleteGroup = function (groupid,event) {
+        event.preventDefault();
+        event.stopPropagation();
+        verifyDelete(event).then(function(selectedItem){
+
+            $http.post('http://localhost:1000/deletegroup', JSON.stringify({'groupid':groupid})).success(function (data) {
+                if(data.success){
+                    $scope.getGroups();
+                }
+            });
+        }),function(cancel){
         }
-     });
-   };
-   $scope.deleteGroup = function (groupid,event) {
-    
-    event.preventDefault();
-    event.stopPropagation();
-     $http.post('http://localhost:1000/deletegroup', JSON.stringify({'groupid':groupid})).success(function (data) {
-        if(data.success){
-         $scope.getGroups();
-        }
-     });
-   };
+    };
 
   $scope.$watch(function() {
     return $rootScope.pendingmembers;
@@ -478,7 +486,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
     $rootScope.createFilterFor = function(query) {
       var lowercaseQuery = angular.lowercase(query);
       return function filterFn(member) {
-        return ((angular.lowercase(member.fname)).indexOf(lowercaseQuery) != -1);;
+        return ((angular.lowercase(member.fname+" "+member.lname)).indexOf(lowercaseQuery) != -1);;
       };
     }
 
@@ -600,7 +608,7 @@ $rootScope.findIndexByKeyValue = function (arraytosearch, key, valuetosearch) {
 
 
   
-function DialogController($scope, $rootScope, $mdDialog) {
+function DialogController($scope, $rootScope, $mdDialog,Success) {
 
   //$scope.cgformtitle = $rootScope.cgformtitle;
   //$scope.cgformid =  $rootScope.cgformid;
@@ -611,8 +619,14 @@ function DialogController($scope, $rootScope, $mdDialog) {
     $mdDialog.cancel();
   };
   $scope.mdRegister = function(user) {
-    $rootScope.register(user);
-    $mdDialog.cancel();
+
+      Success(user).then(function(selecteditem){
+          $rootScope.register(user);
+          $mdDialog.cancel();
+      }),function(cancel){
+
+      }
+
   };
 $scope.mdMsgSend = function(users, message) {
     $rootScope.newMessage(users,message);
@@ -651,7 +665,72 @@ $scope.mdMsgSend = function(users, message) {
      }
    } 
 });*/
+myApp.directive('geocoder',function($scope,$window,$rootScope){
+    return{
+        restrict:'A',
+        scope:{
+           address:"="
+        },
+        link:function(scope,el,attr){
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode( { "address": $rootScope.result1 }, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK && results.length > 0) {
+                    var location = results[0].geometry.location,
+                        lat      = location.lat(),
+                        lng      = location.lng();
+                    $window.alert("Latitude: ");
+                    alert("Longitude: " + lng);
 
+                }
+            });
+        },
+        replace:"true"
+
+    }
+
+})
+myApp.factory('verifyDelete', function($mdDialog) {
+    return function(user) {
+        var confirm = $mdDialog.confirm()
+            .title('Confirm Delete')
+            .content('Are you sure you want to delete ?')
+            .ariaLabel('Delete User')
+            .ok('Delete')
+            .cancel('Cancel');
+        return $mdDialog.show(confirm);
+    }
+})
+myApp.factory('Success', function($mdDialog) {
+    return function(user) {
+        var success = $mdDialog.confirm()
+.title('Registration Success')
+
+
+            .ok('OK')
+
+        return $mdDialog.show(success);
+    }
+})
+var compareTo = function() {
+    return {
+        require: "ngModel",
+        scope: {
+            otherModelValue: "=compareTo"
+        },
+        link: function(scope, element, attributes, ngModel) {
+
+            ngModel.$validators.compareTo = function(modelValue) {
+                return modelValue == scope.otherModelValue;
+            };
+
+            scope.$watch("otherModelValue", function() {
+                ngModel.$validate();
+            });
+        }
+    };
+};
+
+myApp.directive("compareTo", compareTo);
 myApp.directive('createIncident', function() {
   return {
     restrict: 'E',
@@ -801,3 +880,66 @@ myApp.factory('socket', function ($rootScope) {
     }
   };
 });
+
+angular.module( "ngAutocomplete", []).directive('ngAutocomplete', function($parse) {
+        return {
+
+            scope: {
+                details: '=',
+                ngAutocomplete: '=',
+                options: '='
+            },
+
+            link: function(scope, element, attrs, model) {
+
+                //options for autocomplete
+                var opts
+
+                //convert options provided to opts
+                var initOpts = function() {
+                    opts = {}
+                    if (scope.options) {
+                        if (scope.options.types) {
+                            opts.types = []
+                            opts.types.push(scope.options.types)
+                        }
+                        if (scope.options.bounds) {
+                            opts.bounds = scope.options.bounds
+                        }
+                        if (scope.options.country) {
+                            opts.componentRestrictions = {
+                                country: scope.options.country
+                            }
+                        }
+                    }
+                }
+                initOpts()
+
+                //create new autocomplete
+                //reinitializes on every change of the options provided
+                var newAutocomplete = function() {
+                    scope.gPlace = new google.maps.places.Autocomplete(element[0], opts);
+                    google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
+                        scope.$apply(function() {
+//              if (scope.details) {
+                            scope.details = scope.gPlace.getPlace();
+//              }
+                            scope.ngAutocomplete = element.val();
+                        });
+                    })
+                }
+                newAutocomplete()
+
+                //watch options provided to directive
+                scope.watchOptions = function () {
+                    return scope.options
+                };
+                scope.$watch(scope.watchOptions, function () {
+                    initOpts()
+                    newAutocomplete()
+                    element[0].value = '';
+                    scope.ngAutocomplete = element.val();
+                }, true);
+            }
+        };
+    });
