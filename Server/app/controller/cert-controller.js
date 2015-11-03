@@ -650,4 +650,4 @@ function groupsTransform(groups, users){
 		groups[i].members = mem;
 	}
 	return groups;
-}
+} //
