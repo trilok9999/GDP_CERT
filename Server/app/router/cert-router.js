@@ -6,6 +6,7 @@ module.exports = function(app){
 	app.post('/login', certCtrl.login);
 	app.get('/logincheck', certCtrl.logincheck);
 	app.post('/register', certCtrl.register);
+	app.post('/registerMobi',certCtrl.registerMobi);
 	app.get('/getusers', certCtrl.getusers);
 	app.get('/getpendingusers', certCtrl.getpendingusers);
 	app.post('/activateuser', certCtrl.activateuser);

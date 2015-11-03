@@ -84,8 +84,30 @@ module.exports.logout = function(req, res){
 module.exports.register = function(req, res){
 	var  file = req.files.file;
 	var uid = uuid.v1();
-	fs.rename(file.path,'./images/'+uid+'.jpg');
+   fs.rename(file.path,'./images/'+uid+'.jpg');
+
 	var body = req.body;
+	body['isApproved'] = false;
+	body['userid'] = uid;
+	mongoDB.collection('USER', function(err, coll) {
+		coll.insert(body, function(err){
+			if(!err){
+				delete body.password;
+				body['success'] = true;
+				res.send(body);
+			}else{
+				res.send("invalid user");
+			}
+		})
+	});
+}
+
+module.exports.registerMobi = function(req, res){
+	var  file = req.files.file;
+	var uid = uuid.v1();
+	fs.rename(file.path,'./images/'+uid+'.jpg');
+
+	var body = req.query;
 	body['isApproved'] = false;
 	body['userid'] = uid;
 	mongoDB.collection('USER', function(err, coll) {
