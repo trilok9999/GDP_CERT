@@ -1,3 +1,51 @@
+<div ng-controller="AppCtrl" layout="row"  ng-cloak="" class="sidenavdemoBasicUsage">
+
+    <section layout="row" >
+        <md-content  layout-padding="">
+            <div>
+                <md-button ng-click="toggleRight()" ng-hide="isOpenRight()" class="md-primary">
+                    LEGEND
+                </md-button>
+            </div>
+            <div flex=""></div>
+        </md-content>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
+            <md-toolbar class="md-theme-light">
+                <h1 class="md-toolbar-tools">Legend of Map Icons.</h1>
+            </md-toolbar>
+            <md-content ng-controller="RightCtrl" layout-padding="">
+                <div>
+                    <table class=""><tr class="active"><td>
+                        <img src="images/Fire.png">
+                    </td>
+                        <td>Fire</td>
+                    </tr>
+                        <tr class="success"><td>
+                            <img src="images/Electricity.png">
+                        </td>
+                            <td>Electricity</td></tr>
+                        <tr class="warning"><td>
+                            <img src="images/Tornado.png">
+                        </td>
+                            <td>Tornado</td></tr>
+                        <tr class="danger"><td>
+                            <img src="images/Water.png">
+                        </td>
+                            <td>Water</td></tr>
+                    </table></div>
+
+
+
+                <md-button ng-click="close()" class="md-primary">
+                    Close Legend
+                </md-button>
+            </md-content>
+
+        </md-sidenav>
+
+    </section>
+
+</div>
 
 <section ng-controller="certContrl">
     <!--<ui-gmap-google-map class="col-md-12 row" layout="column" center='map.center' zoom='map.zoom'>-->
@@ -17,3 +65,4 @@
         </ui-gmap-markers>
     </ui-gmap-google-map>
 </section>
+
