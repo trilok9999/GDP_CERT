@@ -57,6 +57,7 @@ module.exports.login = function(req, res){
 		});
 	});
 }
+
 module.exports.logincheck = function(req, res){
 	mongoDB.collection('USER_SESSION', function(err, coll) {
 		coll.findOne({sessionId:req.sessionID},{ _id:0}, function(err, data) {
@@ -84,7 +85,7 @@ module.exports.logout = function(req, res){
 module.exports.register = function(req, res){
 	var  file = req.files.file;
 	var uid = uuid.v1();
-   fs.rename(file.path,'./images/'+uid+'.jpg');
+  fs.rename(file.path,'./images/'+uid+'.jpg');
 
 	var body = req.body;
 	body['isApproved'] = false;
@@ -545,6 +546,25 @@ module.exports.getmessage = function(req, res){
 		});
 	});
 }
+module.exports.memberReports=function(req,res){
+	var body = "";
+	req.on('data', function(item){
+		body+= item;
+	});
+	req.on('end', function(){
+		body = JSON.parse(body)
+		body['reportid'] = uuid.v1();
+		body['createDate'] = new Date();
+		mongoDB.collection('REPORTS', function(err, coll) {
+			coll.insert(body, function(err, data) {
+				if(!err){
+					res.send({"success":true});
+				}else{
+					res.send({"success":false});
+				}
+			});
+		});
+	});}
 
 module.exports.getPdf=function(req,res){
 	var doc = new pdfDoc();
