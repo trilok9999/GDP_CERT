@@ -104,7 +104,7 @@ module.exports.register = function(req, res){
 }
 
 module.exports.registerMobi = function(req, res){
-	//var  file = req.files.file;
+	//var  file = req.files.file;          //router for mobile communication
 	var uid = uuid.v1();
 	//fs.rename(file.path,'./images/'+uid+'.jpg');
 
