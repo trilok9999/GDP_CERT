@@ -2,7 +2,7 @@ var certCtrl = require('../controller/cert-controller.js');
 var conf = require('../../config/serverconf.js');
 
 
-module.exports = function(app){
+module.exports = function(app){                 //adding root
 	app.post('/login', certCtrl.login);
 	app.get('/logincheck', certCtrl.logincheck);
 	app.post('/register', certCtrl.register);
