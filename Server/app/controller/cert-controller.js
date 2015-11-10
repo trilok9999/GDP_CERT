@@ -139,10 +139,14 @@ module.exports.getusers = function(req, res){
 	});
 }
 module.exports.getReports = function(req, res){
+	var i=0;
 	mongoDB.collection('REPORTS', function(err, coll) {
+
 		coll.find().toArray(function(err, items) {
 			var response = {};
+
 			if(!err){
+
 				items.forEach(function(report){
 					report['id']=report.incedentid;
 					var templocation=report.location;
@@ -150,23 +154,38 @@ module.exports.getReports = function(req, res){
 					templocation.longitude=parseFloat(templocation.longitude);
 					report.location=templocation;
 					var userid2=report.userid;
+					var groupid2=report.groupid;
 					var user={};
+					var group={};
 					mongoDB.collection('USER',function(err,ucoll){
-						ucoll.find({userid:{'$in':userid2}}).toArray(function(err,items2){
-							if(true){
-							user=items2;
+						ucoll.findOne({userid:userid2},{userid:1,fname:1,lname:1,_id:0},function(err,items2){
+							if(!err){
+								user=items2;
+								report.user=items2;
+								mongoDB.collection('GROUPS',function(err,ucoll2){
+
+								ucoll2.findOne({groupid:groupid2},{name:1,_id:0},function(err,group){
+									if(!err){
+										report.group=group;
+										i++;
+										if(items.length==i){
+											res.send({"success":true,'reports':items});
+										}
+									}
+								})
+								});
+
 
 							}
 							else{
 								user="not valid";
-
 							}
 						})
 					});
-					report.user=user;
+
 
 				});
-				res.send({"success":true,'reports':items});
+
 			}else{
 				res.send({"success":false,'reports':[]});
 			}

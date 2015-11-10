@@ -29,7 +29,7 @@ myApp.controller('certContrl',function($scope, uiGmapGoogleMapApi,$http,$window)
         $scope.map = { center: { latitude: 40.35245, longitude:-94.8822529999999}, zoom: 8 };
 
 
-        $http.get("http://csgrad07.nwmissouri.edu:3000/getIncedents").success(function (response) {
+        $http.get("http://localhost:1000/getIncedents").success(function (response) {
             response.incedents.forEach(function(incident){
                 incident['icon']="./images/"+incident.type+".png";
             });
@@ -40,7 +40,7 @@ myApp.controller('certContrl',function($scope, uiGmapGoogleMapApi,$http,$window)
 
 
         });
-        $http.get("http://csgrad07.nwmissouri.edu:3000/getReports").success(function (response) {
+        $http.get("http://localhost:1000/getReports").success(function (response) {
             response.reports.forEach(function (report) {
                 report['icon'] = "./images/" + report.type +".png";
 
@@ -48,7 +48,7 @@ myApp.controller('certContrl',function($scope, uiGmapGoogleMapApi,$http,$window)
             $scope.reportsArray=response.reports;
         });
         $scope.generatePDF=function(incident){
-            var myPdfUrl = 'http://csgrad07.nwmissouri.edu:3000/pdf?name='+incident.name+'';
+            var myPdfUrl = 'http://localhost:1000/pdf?name='+incident.name+'';
             $window.open(myPdfUrl);
             //$http.get(myPdfUrl)
             //    .success(function(data){
@@ -68,7 +68,7 @@ myApp.controller('certController',certController);
 
 
 function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog, $http, Upload, $filter, $mdMedia, socket,verifyDelete,Success) {
- 
+
   $scope.flag = "home";
   $scope.ulog = true;
   $rootScope.cgformid = "cgform1";
@@ -77,7 +77,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
   $rootScope.menuItemHome = true;
   $scope.menuitems = [{'title':'HOME','id':'home'}];
   $rootScope.bgroups = ['A+','O+','B+','AB+','A-','O-','B-','AB-'];
-  $rootScope.groups = [];      
+  $rootScope.groups = [];
   $rootScope.members = [];
   $scope.user={};
   $rootScope.mdMedia=$mdMedia;
@@ -117,7 +117,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
   $rootScope.getuser = function (userid) {
     $scope.selectedPUser = userid;
     $scope.userselected = true;
-     $http.post('http://csgrad07.nwmissouri.edu:3000/getuser', JSON.stringify({'userid':userid})).then(function (response) {
+     $http.post('http://localhost:1000/getuser', JSON.stringify({'userid':userid})).then(function (response) {
         if(response.data.success){
           delete response.data.success;
           var user = response.data;
@@ -129,12 +129,12 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
    };
 
 
-                        
+
    $rootScope.login = function (user) {
     var tempU= {};
     tempU["emailid"] = user.emailid;
     tempU["password"] = user.password;
-     $http.post('http://csgrad07.nwmissouri.edu:3000/login', JSON.stringify(tempU)).then(function (response) {
+     $http.post('http://localhost:1000/login', JSON.stringify(tempU)).then(function (response) {
         if(response.data.success){
           delete response.data.success;
           var user = response.data;
@@ -161,7 +161,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
      });
    };
     $rootScope.loginCheck = function (user) {
-     $http.get('http://csgrad07.nwmissouri.edu:3000/logincheck', JSON.stringify(user)).then(function (response) {
+     $http.get('http://localhost:1000/logincheck', JSON.stringify(user)).then(function (response) {
         if(response.data.success){
          delete response.data.success;
           var user = response.data.user;
@@ -186,7 +186,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
      });
    };
    $rootScope.logout = function (user) {
-     $http.get('http://csgrad07.nwmissouri.edu:3000/logout').then(function (response) {
+     $http.get('http://localhost:1000/logout').then(function (response) {
         if(response.data=="success"){
           $scope.flag = "home";
           $scope.ulog = true;
@@ -199,14 +199,14 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
      }, function (response) {
      });
    };
-  $rootScope.loginCheck();              
+  $rootScope.loginCheck();
   $rootScope.register = function (user) {
 
     if(user.password===user.cpassword){
         delete user.cpassword;
         if (!$rootScope.file.$error) {
             Upload.upload({
-                url: 'http://csgrad07.nwmissouri.edu:3000/register',
+                url: 'http://localhost:1000/register',
                 fields: user,
                 file: $rootScope.file
             }).success(function(data){
@@ -217,7 +217,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
      }else{
        //alert("Password mismatch..!!");
      }
-     
+
    };
 
    $rootScope.updateStatus = function (status) {
@@ -227,7 +227,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
     ////console.log($rootScope.file.$error);
         if ($rootScope.statusfile===undefined||!$rootScope.statusfile.$error) {
             Upload.upload({
-                url: 'http://csgrad07.nwmissouri.edu:3000/addIncedentStatus',
+                url: 'http://localhost:1000/addIncedentStatus',
                 fields: status,
                 file: $rootScope.statusfile
             }).success(function(data){
@@ -238,18 +238,18 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
             }).error(function(data,status){
             });
           }
-     
+
         } else {
           alert("status message can't be empty")
         }
-    
-     
+
+
    };
 
    $scope.getincidentwall = function(incident){
     $scope.selectedIncident=incident.incedentid;
     $rootScope.curincident=incident;
-    $http.post('http://csgrad07.nwmissouri.edu:3000/getIncedentStatus',{'incident':$rootScope.curincident.incedentid}).success(function (response) {
+    $http.post('http://localhost:1000/getIncedentStatus',{'incident':$rootScope.curincident.incedentid}).success(function (response) {
         if(response.success){
           ////alert('in success')
           $rootScope.incidentwall=response.incedentStatus;
@@ -260,48 +260,48 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
         //alert('error!')
       });
    }
-   
+
   $rootScope.newMessage = function (messages) {
     var users = $rootScope.group.members;
    for (var i = 0; i < users.length; i++) {
           var user = users[i];
           user['username'] = user.fname;
            $rootScope.sendMessage(user,messages);
-        };     
+        };
    };
 
   $rootScope.cgnext = function() {
     $rootScope.cgformtitle ="Add Members";
     $rootScope.cgformid ="cgform2";
-  } 
+  }
   $rootScope.cgback = function() {
     $rootScope.cgformtitle="Create Group";
     $rootScope.cgformid ="cgform1";
   };
-  
+
     $rootScope.cgcreate = function() {
       $rootScope.cgformid="cgform1";
       $rootScope.cgformtitle="Create Group";
   };
-  
+
     $scope.toggleSidenav = function(menuId) {
     $mdSidenav(menuId).toggle();
     if(menuId==='right'){
       $rootScope.onlineusers();
     }
-  }; 
-  
+  };
+
   /*$scope.toggleRight = function(){
    $mdSidenav('right')
               .toggle()
               .then(function () {
-                
+
               });
           }*/
   $scope.setitem = function (item) {
     $scope.flag=item;
-  } 
-  
+  }
+
   $scope.showAdvanced = function(ev) {
     var model_tpl_url = './html/'+ev+'.html';
     $mdDialog.show({
@@ -320,7 +320,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
 
   $scope.getGroupsForIncident = function(){
     ////alert('in')
-        $http.get('http://csgrad07.nwmissouri.edu:3000/getgroups').success(function (response) {
+        $http.get('http://localhost:1000/getgroups').success(function (response) {
         if(response.success){
           ////alert('in success')
           delete response.success;
@@ -334,7 +334,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
   }
 
   $scope.getAllIncidents = function(){
-    $http.get('http://csgrad07.nwmissouri.edu:3000/getIncedents').success(function (response) {
+    $http.get('http://localhost:1000/getIncedents').success(function (response) {
         if(response.success){
           ////alert('in success')
           delete response.success;
@@ -347,7 +347,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
   }
 
   $scope.saveIncident = function(){
-    $http.post('http://csgrad07.nwmissouri.edu:3000/createIncedent',$rootScope.curincident).success(function (response) {
+    $http.post('http://localhost:1000/createIncedent',$rootScope.curincident).success(function (response) {
         if(response.success){
           ////alert('in success')
           $scope.getGroupsForIncident();
@@ -360,10 +360,10 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
       });
   }
 
-  
+
 
   $scope.getMembers = function(){
-       $http.get('http://csgrad07.nwmissouri.edu:3000/getusers').success(function (response) {
+       $http.get('http://localhost:1000/getusers').success(function (response) {
         if(response.success){
           delete response.success;
           for(var i=0; i<response.members.length; i++){
@@ -378,7 +378,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
   }
 
   $scope.getPendingMembers = function(){
-       $http.get('http://csgrad07.nwmissouri.edu:3000/getpendingusers').success(function (response) {
+       $http.get('http://localhost:1000/getpendingusers').success(function (response) {
         if(response.success){
           delete response.success;
           for(var i=0; i<response.members.length; i++){
@@ -394,7 +394,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
 
   $rootScope.curuser={};
   $rootScope.activateuser = function (userid) {
-     $http.post('http://csgrad07.nwmissouri.edu:3000/activateuser', JSON.stringify({'userid':userid})).success(function (data) {
+     $http.post('http://localhost:1000/activateuser', JSON.stringify({'userid':userid})).success(function (data) {
         if(data.success){
           $scope.getPendingMembers();
         }
@@ -402,7 +402,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
    };
     $rootScope.rejectuser = function (userid) {
         verifyDelete(userid).then(function (selectedItem) {
-            $http.post('http://csgrad07.nwmissouri.edu:3000/rejectuser', JSON.stringify({'userid': userid})).success(function (data) {
+            $http.post('http://localhost:1000/rejectuser', JSON.stringify({'userid': userid})).success(function (data) {
                 if (data.success) {
                     $scope.getPendingMembers();
                 }
@@ -415,7 +415,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
         event.stopPropagation();
         verifyDelete(event).then(function(selectedItem){
 
-            $http.post('http://csgrad07.nwmissouri.edu:3000/deletegroup', JSON.stringify({'groupid':groupid})).success(function (data) {
+            $http.post('http://localhost:1000/deletegroup', JSON.stringify({'groupid':groupid})).success(function (data) {
                 if(data.success){
                     $scope.getGroups();
                 }
@@ -448,13 +448,13 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
 
   //$rootScope.$watch($rootScope.group.members, $rootScope.isLeaderDeleted($rootScope.group), true);
 
-  
+
   $scope.getMembers();
     $scope.saveGroup = function(){
       var group = angular.fromJson(JSON.stringify($rootScope.group));
-      $http.post('http://csgrad07.nwmissouri.edu:3000/creategroup', group).success(function (response) {
+      $http.post('http://localhost:1000/creategroup', group).success(function (response) {
         if(response.success){
-         
+
         }
       }).error(function(data){
         //alert('error!')
@@ -462,7 +462,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
     }
 
     $scope.getGroups = function(){
-        $http.get('http://csgrad07.nwmissouri.edu:3000/getgroups').success(function (response) {
+        $http.get('http://localhost:1000/getgroups').success(function (response) {
         if(response.success){
           delete response.success;
           $rootScope.groups= response.groups;
@@ -471,7 +471,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
         //alert('error!')
       });
   }
-  
+
     $rootScope.filterSelected = true;
     $rootScope.group = {'name':'','members':[]};
     /**
@@ -506,7 +506,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
     }
     $rootScope.onlineusers = function () {
      var userid = $rootScope.user.userid;
-     $http.post('http://csgrad07.nwmissouri.edu:3000/onlineusers', $rootScope.user.userid).then(function (response) {
+     $http.post('http://localhost:1000/onlineusers', $rootScope.user.userid).then(function (response) {
         if(response.data.success){
           delete response.data.success;
           var users = response.data.users;
@@ -520,7 +520,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
    };
   $rootScope.getMessages = function () {
      var reqObj = {'username':$rootScope.user.fname,'userid':$rootScope.user.userid};
-     $http.post('http://csgrad07.nwmissouri.edu:3000/getmessages', JSON.stringify(reqObj)).then(function (response) {
+     $http.post('http://localhost:1000/getmessages', JSON.stringify(reqObj)).then(function (response) {
         if(response.data.success){
           delete response.data.success;
           if(response.data.messages!=null && response.data.messages!=undefined){
@@ -528,20 +528,20 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
           }else{
              $rootScope.messages = [];
           }
-         
+
         }
      }, function (response) {
      });
    };
 
-    
+
    $rootScope.sendMessage = function (touser,message) {
      var users = [];
      var touser = {'username':touser.username, 'userid': touser.userid};
      var fromuser = {'username':$rootScope.user.fname,'userid':$rootScope.user.userid};
      users.push(touser);
      users.push(fromuser);
-     var msg = {'username':$rootScope.user.fname,'userid':$rootScope.user.userid, 'messages' : message, 'date':new Date()}; 
+     var msg = {'username':$rootScope.user.fname,'userid':$rootScope.user.userid, 'messages' : message, 'date':new Date()};
      var req = {'users':users, 'messages':msg};
      //console.log("sendMessage");
      socket.emit('message',req);
@@ -552,7 +552,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
 
    $rootScope.chatuser = function(user){
     var reqObj ={userid:$rootScope.user.userid, users:[{'username':user.fname, 'userid':user.userid}, {'username':$rootScope.user.fname, 'userid':$rootScope.user.userid}]};
-    $http.post('http://csgrad07.nwmissouri.edu:3000/getmessage', JSON.stringify(reqObj)).then(function (response) {
+    $http.post('http://localhost:1000/getmessage', JSON.stringify(reqObj)).then(function (response) {
         if(response.data.success){
           delete response.data.success;
           var cmsg = response.data.message;
@@ -866,7 +866,7 @@ myApp.directive('nksOnlyNumber', function () {
 });
 
 myApp.factory('socket', function ($rootScope) {
-  var socket = io.connect("http://csgrad07.nwmissouri.edu:2000");
+  var socket = io.connect("http://localhost:2000");
   return {
     on: function (eventName, callback) {
       socket.on(eventName, function () {  

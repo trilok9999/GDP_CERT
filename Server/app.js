@@ -21,7 +21,7 @@ app.use(function(req, res, next) {
 //app.use(bodyParser());
 //app.use(cookieParser());
 app.use(session({
-    cookie: { maxAge: 1000 * 60 * 2 },
+    cookie: { maxAge: 1000 * 60 * 120 },
     secret: "certSatya",
     store: new MongoStore({
 		db: 'CERT',
