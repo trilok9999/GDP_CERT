@@ -138,7 +138,41 @@ module.exports.getusers = function(req, res){
       });
 	});
 }
+module.exports.getReports = function(req, res){
+	mongoDB.collection('REPORTS', function(err, coll) {
+		coll.find().toArray(function(err, items) {
+			var response = {};
+			if(!err){
+				items.forEach(function(report){
+					report['id']=report.incedentid;
+					var templocation=report.location;
+					templocation.latitude=parseFloat(templocation.latitude);
+					templocation.longitude=parseFloat(templocation.longitude);
+					report.location=templocation;
+					var userid2=report.userid;
+					var user={};
+					mongoDB.collection('USER',function(err,ucoll){
+						ucoll.find({userid:{'$in':userid2}}).toArray(function(err,items2){
+							if(true){
+							user=items2;
 
+							}
+							else{
+								user="not valid";
+
+							}
+						})
+					});
+					report.user=user;
+
+				});
+				res.send({"success":true,'reports':items});
+			}else{
+				res.send({"success":false,'reports':[]});
+			}
+		});
+	});
+}
 module.exports.getSepusers = function(req, res){
 	var body = "";
 	req.on('data', function(item){
@@ -147,7 +181,7 @@ module.exports.getSepusers = function(req, res){
 	req.on('end', function(){
 		var query = {'userid':{'$in':JSON.parse(body)}};
 		mongoDB.collection('USER', function(err, coll) {
-			coll.find(query,{password:0, _id:0, isApproved:0}).toarry(function(err, items) {
+			coll.find(query,{password:0, _id:0, isApproved:0}).toarray(function(err, items) {
 					var response = {};
 					if(!err){
 						response = {"success":true, members:items}

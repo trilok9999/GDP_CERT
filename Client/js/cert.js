@@ -29,19 +29,26 @@ myApp.controller('certContrl',function($scope, uiGmapGoogleMapApi,$http,$window)
         $scope.map = { center: { latitude: 40.35245, longitude:-94.8822529999999}, zoom: 8 };
 
 
-        $http.get("http://localhost:1000/getIncedents").success(function (response) {
+        $http.get("http://csgrad07.nwmissouri.edu:3000/getIncedents").success(function (response) {
             response.incedents.forEach(function(incident){
                 incident['icon']="./images/"+incident.type+".png";
             });
 
-            $scope.incidentArray = response.incedents;
+
+           $scope.incidentArray = response.incedents;
 
 
 
         });
+        $http.get("http://csgrad07.nwmissouri.edu:3000/getReports").success(function (response) {
+            response.reports.forEach(function (report) {
+                report['icon'] = "./images/" + report.type +".png";
 
+            });
+            $scope.reportsArray=response.reports;
+        });
         $scope.generatePDF=function(incident){
-            var myPdfUrl = 'http://localhost:1000/pdf?name='+incident.name+'';
+            var myPdfUrl = 'http://csgrad07.nwmissouri.edu:3000/pdf?name='+incident.name+'';
             $window.open(myPdfUrl);
             //$http.get(myPdfUrl)
             //    .success(function(data){
@@ -110,7 +117,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
   $rootScope.getuser = function (userid) {
     $scope.selectedPUser = userid;
     $scope.userselected = true;
-     $http.post('http://localhost:1000/getuser', JSON.stringify({'userid':userid})).then(function (response) {
+     $http.post('http://csgrad07.nwmissouri.edu:3000/getuser', JSON.stringify({'userid':userid})).then(function (response) {
         if(response.data.success){
           delete response.data.success;
           var user = response.data;
@@ -127,7 +134,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
     var tempU= {};
     tempU["emailid"] = user.emailid;
     tempU["password"] = user.password;
-     $http.post('http://localhost:1000/login', JSON.stringify(tempU)).then(function (response) {
+     $http.post('http://csgrad07.nwmissouri.edu:3000/login', JSON.stringify(tempU)).then(function (response) {
         if(response.data.success){
           delete response.data.success;
           var user = response.data;
@@ -154,7 +161,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
      });
    };
     $rootScope.loginCheck = function (user) {
-     $http.get('http://localhost:1000/logincheck', JSON.stringify(user)).then(function (response) {
+     $http.get('http://csgrad07.nwmissouri.edu:3000/logincheck', JSON.stringify(user)).then(function (response) {
         if(response.data.success){
          delete response.data.success;
           var user = response.data.user;
@@ -179,7 +186,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
      });
    };
    $rootScope.logout = function (user) {
-     $http.get('http://localhost:1000/logout').then(function (response) {
+     $http.get('http://csgrad07.nwmissouri.edu:3000/logout').then(function (response) {
         if(response.data=="success"){
           $scope.flag = "home";
           $scope.ulog = true;
@@ -199,7 +206,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
         delete user.cpassword;
         if (!$rootScope.file.$error) {
             Upload.upload({
-                url: 'http://localhost:1000/register',
+                url: 'http://csgrad07.nwmissouri.edu:3000/register',
                 fields: user,
                 file: $rootScope.file
             }).success(function(data){
@@ -220,7 +227,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
     ////console.log($rootScope.file.$error);
         if ($rootScope.statusfile===undefined||!$rootScope.statusfile.$error) {
             Upload.upload({
-                url: 'http://localhost:1000/addIncedentStatus',
+                url: 'http://csgrad07.nwmissouri.edu:3000/addIncedentStatus',
                 fields: status,
                 file: $rootScope.statusfile
             }).success(function(data){
@@ -242,7 +249,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
    $scope.getincidentwall = function(incident){
     $scope.selectedIncident=incident.incedentid;
     $rootScope.curincident=incident;
-    $http.post('http://localhost:1000/getIncedentStatus',{'incident':$rootScope.curincident.incedentid}).success(function (response) {
+    $http.post('http://csgrad07.nwmissouri.edu:3000/getIncedentStatus',{'incident':$rootScope.curincident.incedentid}).success(function (response) {
         if(response.success){
           ////alert('in success')
           $rootScope.incidentwall=response.incedentStatus;
@@ -313,7 +320,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
 
   $scope.getGroupsForIncident = function(){
     ////alert('in')
-        $http.get('http://localhost:1000/getgroups').success(function (response) {
+        $http.get('http://csgrad07.nwmissouri.edu:3000/getgroups').success(function (response) {
         if(response.success){
           ////alert('in success')
           delete response.success;
@@ -327,7 +334,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
   }
 
   $scope.getAllIncidents = function(){
-    $http.get('http://localhost:1000/getIncedents').success(function (response) {
+    $http.get('http://csgrad07.nwmissouri.edu:3000/getIncedents').success(function (response) {
         if(response.success){
           ////alert('in success')
           delete response.success;
@@ -340,7 +347,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
   }
 
   $scope.saveIncident = function(){
-    $http.post('http://localhost:1000/createIncedent',$rootScope.curincident).success(function (response) {
+    $http.post('http://csgrad07.nwmissouri.edu:3000/createIncedent',$rootScope.curincident).success(function (response) {
         if(response.success){
           ////alert('in success')
           $scope.getGroupsForIncident();
@@ -356,7 +363,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
   
 
   $scope.getMembers = function(){
-       $http.get('http://localhost:1000/getusers').success(function (response) {
+       $http.get('http://csgrad07.nwmissouri.edu:3000/getusers').success(function (response) {
         if(response.success){
           delete response.success;
           for(var i=0; i<response.members.length; i++){
@@ -371,7 +378,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
   }
 
   $scope.getPendingMembers = function(){
-       $http.get('http://localhost:1000/getpendingusers').success(function (response) {
+       $http.get('http://csgrad07.nwmissouri.edu:3000/getpendingusers').success(function (response) {
         if(response.success){
           delete response.success;
           for(var i=0; i<response.members.length; i++){
@@ -387,7 +394,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
 
   $rootScope.curuser={};
   $rootScope.activateuser = function (userid) {
-     $http.post('http://localhost:1000/activateuser', JSON.stringify({'userid':userid})).success(function (data) {
+     $http.post('http://csgrad07.nwmissouri.edu:3000/activateuser', JSON.stringify({'userid':userid})).success(function (data) {
         if(data.success){
           $scope.getPendingMembers();
         }
@@ -395,7 +402,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
    };
     $rootScope.rejectuser = function (userid) {
         verifyDelete(userid).then(function (selectedItem) {
-            $http.post('http://localhost:1000/rejectuser', JSON.stringify({'userid': userid})).success(function (data) {
+            $http.post('http://csgrad07.nwmissouri.edu:3000/rejectuser', JSON.stringify({'userid': userid})).success(function (data) {
                 if (data.success) {
                     $scope.getPendingMembers();
                 }
@@ -408,7 +415,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
         event.stopPropagation();
         verifyDelete(event).then(function(selectedItem){
 
-            $http.post('http://localhost:1000/deletegroup', JSON.stringify({'groupid':groupid})).success(function (data) {
+            $http.post('http://csgrad07.nwmissouri.edu:3000/deletegroup', JSON.stringify({'groupid':groupid})).success(function (data) {
                 if(data.success){
                     $scope.getGroups();
                 }
@@ -445,7 +452,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
   $scope.getMembers();
     $scope.saveGroup = function(){
       var group = angular.fromJson(JSON.stringify($rootScope.group));
-      $http.post('http://localhost:1000/creategroup', group).success(function (response) {
+      $http.post('http://csgrad07.nwmissouri.edu:3000/creategroup', group).success(function (response) {
         if(response.success){
          
         }
@@ -455,7 +462,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
     }
 
     $scope.getGroups = function(){
-        $http.get('http://localhost:1000/getgroups').success(function (response) {
+        $http.get('http://csgrad07.nwmissouri.edu:3000/getgroups').success(function (response) {
         if(response.success){
           delete response.success;
           $rootScope.groups= response.groups;
@@ -499,7 +506,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
     }
     $rootScope.onlineusers = function () {
      var userid = $rootScope.user.userid;
-     $http.post('http://localhost:1000/onlineusers', $rootScope.user.userid).then(function (response) {
+     $http.post('http://csgrad07.nwmissouri.edu:3000/onlineusers', $rootScope.user.userid).then(function (response) {
         if(response.data.success){
           delete response.data.success;
           var users = response.data.users;
@@ -513,7 +520,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
    };
   $rootScope.getMessages = function () {
      var reqObj = {'username':$rootScope.user.fname,'userid':$rootScope.user.userid};
-     $http.post('http://localhost:1000/getmessages', JSON.stringify(reqObj)).then(function (response) {
+     $http.post('http://csgrad07.nwmissouri.edu:3000/getmessages', JSON.stringify(reqObj)).then(function (response) {
         if(response.data.success){
           delete response.data.success;
           if(response.data.messages!=null && response.data.messages!=undefined){
@@ -545,7 +552,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
 
    $rootScope.chatuser = function(user){
     var reqObj ={userid:$rootScope.user.userid, users:[{'username':user.fname, 'userid':user.userid}, {'username':$rootScope.user.fname, 'userid':$rootScope.user.userid}]};
-    $http.post('http://localhost:1000/getmessage', JSON.stringify(reqObj)).then(function (response) {
+    $http.post('http://csgrad07.nwmissouri.edu:3000/getmessage', JSON.stringify(reqObj)).then(function (response) {
         if(response.data.success){
           delete response.data.success;
           var cmsg = response.data.message;
@@ -859,7 +866,7 @@ myApp.directive('nksOnlyNumber', function () {
 });
 
 myApp.factory('socket', function ($rootScope) {
-  var socket = io.connect("http://localhost:2000");
+  var socket = io.connect("http://csgrad07.nwmissouri.edu:2000");
   return {
     on: function (eventName, callback) {
       socket.on(eventName, function () {  

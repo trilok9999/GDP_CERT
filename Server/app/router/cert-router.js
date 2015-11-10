@@ -27,4 +27,5 @@ module.exports = function(app){
 	app.get('/getIncedents', certCtrl.getIncedents);
 	app.post('/getIncedentStatus', certCtrl.getIncedentStatus);
 	app.get('/pdf',certCtrl.getPdf);
+	app.get('/getReports',certCtrl.getReports);
 }
