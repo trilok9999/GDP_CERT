@@ -60,6 +60,13 @@
         filter-selected="$root.filterSelected"
         placeholder="Members">
     </md-contact-chips>
+    <md-input-container>
+        <label>Leader</label>
+
+        <md-select ng-disabled="!$root.edit"  ng-model="$root.group.leader.userid">
+            <md-option ng-repeat="member in $root.group.members" value="{{member.userid}}">{{member.fname+" "+member.lname}}</md-option>
+        </md-select>
+    </md-input-container>
     <md-list class="fixedRows" ng-if="$root.edit">
       <md-subheader class="md-no-sticky">Users</md-subheader>
       <md-list-item class="md-2-line contact-item" ng-repeat="member in $root.members track by $index"
@@ -93,11 +100,5 @@
     </md-list>
     <!-- {{$root.group}}ng-init="$root.group.leader.userid = $root.group.members===undefined|| $root.group.members.length==0 ||$root.group.leader.userid===undefined? '' : $root.group.leader.userid" -->
     
-    <md-input-container>
-        <label>Leader</label>
 
-        <md-select ng-disabled="!$root.edit"  ng-model="$root.group.leader.userid">
-          <md-option ng-repeat="member in $root.group.members" value="{{member.userid}}">{{member.fname+" "+member.lname}}</md-option>
-        </md-select>
-      </md-input-container> 
 </md-content>

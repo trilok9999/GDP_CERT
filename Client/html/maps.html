@@ -65,10 +65,14 @@
         </ui-gmap-markers>
         <ui-gmap-markers models="reportsArray" coords="'location'" icon="'icon'">
             <ui-gmap-windows show="show">
-                <!--<div ng-non-bindable>-->
-                    <!--<div class="col-md-12"><b>Name: {{name}}</b></div>-->
-                    <!--<div class="col-md-12"><b>Team: {{groups[0].name}}</b></div>-->
-                <!--</div>-->
+                <div ng-non-bindable>
+                    <div class="col-md-12"><b>Name: {{user.fname}}  {{user.lname}}</b></div>
+                    <div class="col-md-12"><b>Team: {{group.name}}</b></div>
+                    <div class="col-md-12"><b>Number of Remains :{{remains}}</b></div>
+                    <div class="col-md-12"><b>Level of Severity: {{severity}}</b></div>
+                    <div class="col-md-12"><b>Date: {{createDate | date}}</b></div>
+
+                </div>
                 <!--<div ng-repeat="team in groups" ng-non-bindable><b>Team: {{team.name}}</b></div>-->
 
             </ui-gmap-windows>

@@ -50,5 +50,5 @@ var sess;
 
 require('./app/router/cert-router.js')(app);
 
-app.listen(1000);
-console.log('Sever Started on 1000');
+app.listen(3000);
+console.log('Sever Started on 3000');
