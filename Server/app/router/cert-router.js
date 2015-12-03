@@ -6,6 +6,7 @@ module.exports = function(app){                 //adding root
 	app.post('/login', certCtrl.login);
 	app.get('/logincheck', certCtrl.logincheck);
 	app.post('/register', certCtrl.register);
+	app.get('/getIncidentWall',certCtrl.getIncidentWall);
 	app.post('/memberReports',certCtrl.memberReports);
 	app.post('/registerMobi',certCtrl.registerMobi);
 	app.get('/getusers', certCtrl.getusers);
@@ -24,6 +25,7 @@ module.exports = function(app){                 //adding root
 	app.get('/logout', certCtrl.logout);
 	app.post('/createIncedent', certCtrl.createIncedent);
 	app.post('/addIncedentStatus', certCtrl.addIncedentStatus);
+	app.post('/addIncedentStatusMobile', certCtrl.addIncedentStatusMobile);
 	app.get('/getIncedents', certCtrl.getIncedents);
 	app.post('/getIncedentStatus', certCtrl.getIncedentStatus);
 	app.get('/pdf',certCtrl.getPdf);

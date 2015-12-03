@@ -1,28 +1,29 @@
 <div layout="column" layout-wrap layout-margin >
-	<md-input-container flex="100">
-		<label>Type message</label>
-		<textarea style="padding-right:30%" ng-model="status.message"></textarea>
-	</md-input-container>
-	<div style="position: absolute;right: 0;margin-top: -12%;" layout="row" layout-align="center center">
-	<md-button flex class="md-primary" style="margin-top:10px" ngf-select="" ngf-drop="" ng-model="$root.statusfile" ngf-pattern="pattern" accept="image/*" ngf-capture="capture" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-keep="keep" ngf-keep-distinct="keepDistinct" ngf-allow-dir="allowDir" class="drop-box ng-pristine ng-valid" ngf-drop-available="dropAvailable"><i class="material-icons">attach_file</i></md-button>
 
-	<md-button flex ng-click="updateStatus(status)" class="md-primary md-raised" style="margin-top:10px">Post</md-button>
-	
-
-	</div>
 
 		<div class="previewStatusImg">
           <img ngf-src="!$root.statusfile.$error && $root.statusfile" class=""/>
         </div>
-	
-     <md-card flex class="toolbar-item" ng-repeat="status in $root.incidentwall | orderBy:'-createDate'">
+ <md-input-container>
+	  		<label>Type message</label>
+	  		<textarea style="padding-right:30%" ng-model="status.message"></textarea>
+	  	</md-input-container>
+	  	<div style="position: absolute;right: 0;margin-top: -12%;" layout="row" layout-align="center center">
+	  	<md-button flex class="md-primary" style="margin-top:10px" ngf-select="" ngf-drop="" ng-model="$root.statusfile" ngf-pattern="pattern" accept="image/*" ngf-capture="capture" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-keep="keep" ngf-keep-distinct="keepDistinct" ngf-allow-dir="allowDir" class="drop-box ng-pristine ng-valid" ngf-drop-available="dropAvailable"><i class="material-icons">attach_file</i></md-button>
+
+	  	<md-button flex ng-click="updateStatus(status)" class="md-primary md-raised" style="margin-top:10px">Post</md-button>
+
+	</div>
+     <md-card class="toolbar-item" ng-repeat="status in $root.incidentwall | orderBy:'-createDate'">
         <!-- <img ng-src="{{imagePath}}" class="md-card-image" alt="Washed Out">-->
         <md-card-content>
         <div class="md-title">
-       <img style="float: left;" ng-src="{{user.photo}}" class="md-avatar status-photo-icon" alt="./images/ic_account_circle_black_48px.svg" /><div style="float: left;margin-top: 10px;margin-left: 5px;">{{status.postedby.fname}}</div></div>
+       <img style="float: left;" ng-src="{{user.photo}}" class="md-avatar status-photo-icon" alt="./images/ic_account_circle_black_48px.svg" /><div style="float: left;margin-top: 10px;margin-left: 5px;">{{status.postedby.fname}} {{status.postedby.lname}}</div><div style="float: right;margin-top: 10px;margin-right: 0px;"> {{status.createDate|timeago}}</div></div>
           <div style="margin-top:50px">{{status.message}}</div>
           <img ng-src="{{status.img}}" style="max-width:100%">
-          
+
         </md-card-content>
+
       </md-card>
+
   </div>

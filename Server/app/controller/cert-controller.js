@@ -21,6 +21,23 @@ db.open(function(err, db) {
 	mongoDB= db
   }
 });
+module.exports.getIncidentWall = function(req, res){
+	var dataArray=[];
+	mongoDB.collection('INCEDENTS_WALL', function(err, coll) {
+		coll.find({incident:req.query.incident},{ _id:0}).toArray(function(err, data) {
+		if(!err){
+						response = {"success":true, members:data}
+						res.send(response);
+			}
+			else{
+				var temp={};
+				temp['success'] = false;
+				res.send(temp);
+			}
+		}
+		);
+	});
+}
 module.exports.login = function(req, res){
 	var body = "";
 	req.on('data', function(item){
@@ -49,7 +66,7 @@ module.exports.login = function(req, res){
 								res.send("Login Failed");
 							}
 						});
-					});	
+					});
 				}else{
 					res.send("invalid");
 				}
@@ -256,6 +273,26 @@ module.exports.addIncedentStatus = function(req, res){
 		});
 	});
 }
+module.exports.addIncedentStatusMobile = function(req, res){
+	//var  file = req.files.file;
+	var body = req.query;
+	var uid = uuid.v1();
+	//if(file!=null && file!=undefined){
+	//	fs.rename(file.path,'./images/'+uid+'.jpg');
+	//	body['img'] = './'+uid+'.jpg'
+	//}
+	body['id'] = uid;
+	body['createDate'] = new Date();
+	mongoDB.collection('INCEDENTS_WALL', function(err, coll) {
+		coll.insert(body, function(err, data) {
+			if(!err){
+				res.send({"success":true});
+			}else{
+				res.send({"success":false});
+			}
+		});
+	});
+}
 
 module.exports.getIncedents = function(req, res){
 	mongoDB.collection('INCEDENTS', function(err, coll) {
@@ -300,7 +337,7 @@ module.exports.getIncedentStatus = function(req, res){
 							res.send({"success":true,'incedentStatus':data});
 						});
 					});
-					
+
 				}else{
 					res.send({"success":false,'incedentStatus':[]});
 				}
@@ -427,7 +464,7 @@ module.exports.creategroup = function(req, res){
 				var tempMem = body.members;
 				var tmem = arrayOfValues(tempMem, 'userid');
 				body.members = tmem;
-				
+
 				coll.findOne({'groupid':body.groupid},function(err,data){
 					var emem = data.members;
 					mongoDB.collection('USER', function(err, ucoll) {
@@ -477,14 +514,14 @@ module.exports.deletegroup = function(req, res){
 			}else{
 				res.send({"success":false, message:"No such a group Exists.!"});
 			}
-			
+
 		});
 	});
 }
 
 
 module.exports.getgroups = function(req, res){
-	
+
 	mongoDB.collection('GROUPS', function(err, coll) {
 		coll.find({},{_id:0}).toArray(function(err, items) {
         	var response = {};
@@ -502,7 +539,7 @@ module.exports.getgroups = function(req, res){
 				response = {"success":true, groups:[]}
 				res.send(response);
 			}
-		}); 
+		});
 	});
 }
 
@@ -544,12 +581,12 @@ module.exports.getmessages = function(req, res){
 
 
 module.exports.onlineusers = function(req, res){
-	
+
 	var body = "";
 	req.on('data', function(item){
 		body+= item;
 	});
-	req.on('end', function(){		
+	req.on('end', function(){
 		var currentUserid =[];
 		currentUserid.push(body);
 		var query={"userid":{"$nin":currentUserid}, "online" : true};
@@ -569,12 +606,12 @@ module.exports.onlineusers = function(req, res){
 }
 
 module.exports.getmessage = function(req, res){
-	
+
 	var body = "";
 	req.on('data', function(item){
 		body+= item;
 	});
-	req.on('end', function(){		
+	req.on('end', function(){
 		var currentUserid =[];
 		body = JSON.parse(body);
 		currentUserid = body.users;
@@ -642,7 +679,9 @@ module.exports.getPdf=function(req,res){
 					doc.fontSize(20).fillColor("blue").text("Incident Type:",{underline:'true'});
 					doc.fontSize(14).fillColor("black").text(incident.type);
 					doc.fontSize(20).fillColor("blue").text("Location", {underline: 'true'});
-					doc.fontSize(20).fillColor("black").text("Compton,NY");
+					doc.fontSize(14).fillColor("black").text(incident.location.latitude+","+incident.location.longitude);
+					doc.fontSize(20).fillColor("blue").text("Date Created:", {underline: 'true'});
+					doc.fontSize(14).fillColor("black").text(new Date(incident.createDate));
 					doc.pipe(res);
 					doc.end();
 					//geocoder.reverseGeocode(33.7489,-84.3789,function ( err, data ) {
@@ -672,7 +711,7 @@ module.exports.getPdf=function(req,res){
 
 }
 
-function findIndexByKeyValue(arraytosearch, key, valuetosearch) {    
+function findIndexByKeyValue(arraytosearch, key, valuetosearch) {
     for (var i = 0; i < arraytosearch.length; i++) {
       if (arraytosearch[i][key] == valuetosearch) {
         return i;
@@ -682,21 +721,21 @@ function findIndexByKeyValue(arraytosearch, key, valuetosearch) {
 }
 
 function groupMembers(items){
-	var li = []; 
+	var li = [];
 	for(var i = 0; i < items.length; i++){
 		var arraytosearch = items[i].members;
 		for (var j = 0; j < arraytosearch.length; j++) {
-			li.push(arraytosearch[j]);	
+			li.push(arraytosearch[j]);
      }
 	}
 	return li;
 }
 
 
-function arrayOfValues(arraytosearch, key){ 
-	var li = []; 
+function arrayOfValues(arraytosearch, key){
+	var li = [];
 	for (var i = 0; i < arraytosearch.length; i++) {
-		li.push(arraytosearch[i][key]);	
+		li.push(arraytosearch[i][key]);
      }
 	 return li;
 }

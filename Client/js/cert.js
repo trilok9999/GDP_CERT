@@ -10,7 +10,7 @@ myApp.config(function($mdThemingProvider) {
     })
     // If you specify less than all of the keys, it will inherit from the
     // default shades
-    .accentPalette('grey', { 
+    .accentPalette('grey', {
       'default': 'A400' // use shade 200 for default, and keep all other shades the same
     });
 });
@@ -27,7 +27,7 @@ myApp.controller('certContrl',function($scope, uiGmapGoogleMapApi,$http,$window)
     uiGmapGoogleMapApi.then(function(maps) {
 
         $scope.map = { center: { latitude: 40.35245, longitude:-94.8822529999999}, zoom: 8 };
-
+$scope.reportsArray=[];
 
         $http.get("http://csgrad07.nwmissouri.edu:3000/getIncedents").success(function (response) {
             response.incedents.forEach(function(incident){
@@ -43,9 +43,10 @@ myApp.controller('certContrl',function($scope, uiGmapGoogleMapApi,$http,$window)
         $http.get("http://csgrad07.nwmissouri.edu:3000/getReports").success(function (response) {
             response.reports.forEach(function (report) {
                 report['icon'] = "./images/" + report.type +".png";
+                $scope.reportsArray.push(report);
 
             });
-            $scope.reportsArray=response.reports;
+
         });
         $scope.generatePDF=function(incident){
             var myPdfUrl = 'http://csgrad07.nwmissouri.edu:3000/pdf?name='+incident.name+'';
@@ -62,6 +63,75 @@ myApp.controller('certContrl',function($scope, uiGmapGoogleMapApi,$http,$window)
     });
 
 });
+myApp.filter('timeago', function() {
+        return function(input, p_allowFuture) {
+
+            var substitute = function (stringOrFunction, number, strings) {
+                    var string = angular.isFunction(stringOrFunction) ? stringOrFunction(number, dateDifference) : stringOrFunction;
+                    var value = (strings.numbers && strings.numbers[number]) || number;
+                    return string.replace(/%d/i, value);
+                },
+                nowTime = (new Date()).getTime(),
+                date = (new Date(input)).getTime(),
+                //refreshMillis= 6e4, //A minute
+                allowFuture = p_allowFuture || false,
+                strings= {
+                    prefixAgo: '',
+                    prefixFromNow: '',
+                    suffixAgo: "ago",
+                    suffixFromNow: "from now",
+                    seconds: "less than a minute",
+                    minute: "about a minute",
+                    minutes: "%d minutes",
+                    hour: "about an hour",
+                    hours: "about %d hours",
+                    day: "a day",
+                    days: "%d days",
+                    month: "about a month",
+                    months: "%d months",
+                    year: "about a year",
+                    years: "%d years"
+                },
+                dateDifference = nowTime - date,
+                words,
+                seconds = Math.abs(dateDifference) / 1000,
+                minutes = seconds / 60,
+                hours = minutes / 60,
+                days = hours / 24,
+                years = days / 365,
+                separator = strings.wordSeparator === undefined ?  " " : strings.wordSeparator,
+
+
+                prefix = strings.prefixAgo,
+                suffix = strings.suffixAgo;
+
+            if (allowFuture) {
+                if (dateDifference < 0) {
+                    prefix = strings.prefixFromNow;
+                    suffix = strings.suffixFromNow;
+                }
+            }
+
+            words = seconds < 45 && substitute(strings.seconds, Math.round(seconds), strings) ||
+            seconds < 90 && substitute(strings.minute, 1, strings) ||
+            minutes < 45 && substitute(strings.minutes, Math.round(minutes), strings) ||
+            minutes < 90 && substitute(strings.hour, 1, strings) ||
+            hours < 24 && substitute(strings.hours, Math.round(hours), strings) ||
+            hours < 42 && substitute(strings.day, 1, strings) ||
+            days < 30 && substitute(strings.days, Math.round(days), strings) ||
+            days < 45 && substitute(strings.month, 1, strings) ||
+            days < 365 && substitute(strings.months, Math.round(days / 30), strings) ||
+            years < 1.5 && substitute(strings.year, 1, strings) ||
+            substitute(strings.years, Math.round(years), strings);
+			console.log(prefix+words+suffix+separator);
+			prefix.replace(/ /g, '')
+			words.replace(/ /g, '')
+			suffix.replace(/ /g, '')
+			return (prefix+' '+words+' '+suffix+' '+separator);
+
+        };
+    });
+
 myApp.controller('certController',certController);
 
 
@@ -561,7 +631,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
             var tuser = {'cuser':{'username':user.fname, 'userid':user.userid}, 'messages':[]};
             $rootScope.chatusers.push(tuser);
           }
-         
+
         }else{
           var tuser = {'cuser':{'username':user.fname, 'userid':user.userid}, 'messages':[]};
           $rootScope.chatusers.push(tuser);
@@ -571,7 +641,7 @@ function certController($timeout, $q, $scope, $rootScope, $mdSidenav, $mdDialog,
       $scope.toggleSidenav('right');
    }
 
-$rootScope.findIndexByKeyValue = function (arraytosearch, key, valuetosearch) {    
+$rootScope.findIndexByKeyValue = function (arraytosearch, key, valuetosearch) {
     for (var i = 0; i < arraytosearch.length; i++) {
       if (arraytosearch[i][key] == valuetosearch) {
         return i;
@@ -584,7 +654,7 @@ $rootScope.findIndexByKeyValue = function (arraytosearch, key, valuetosearch) {
 
     socket.on('newlogin',function(data){
       $rootScope.onlineusers()
-    }); 
+    });
     /*message revicing*/
     socket.on('message',function(data){
       var users = data.users;
@@ -608,13 +678,13 @@ $rootScope.findIndexByKeyValue = function (arraytosearch, key, valuetosearch) {
       }else{
         $rootScope.chatusers.push(data);
       }*/
-    }); 
+    });
 
 
 };
 
 
-  
+
 function DialogController($scope, $rootScope, $mdDialog,Success) {
 
   //$scope.cgformtitle = $rootScope.cgformtitle;
@@ -647,7 +717,7 @@ $scope.mdMsgSend = function(users, message) {
    $scope.mdcgcreate = function() {
       $rootScope.mdcgcreate();
       $mdDialog.cancel();
-    
+
   };
   $scope.mdcgnext = function() {
      $rootScope.cgnext();
@@ -670,7 +740,7 @@ $scope.mdMsgSend = function(users, message) {
            $rootScope.getuser(scope.member.userid);
         }
      }
-   } 
+   }
 });*/
 myApp.directive('geocoder',function($scope,$window,$rootScope){
     return{
@@ -741,7 +811,7 @@ myApp.directive("compareTo", compareTo);
 myApp.directive('createIncident', function() {
   return {
     restrict: 'E',
-    
+
     templateUrl: '/myapp/html/createincident.html'
   }
 });
@@ -749,7 +819,7 @@ myApp.directive('createIncident', function() {
 myApp.directive('incidentWall', function() {
   return {
     restrict: 'E',
-    
+
     templateUrl: '/myapp/html/incidentwall.html'
   }
 });
@@ -868,7 +938,7 @@ myApp.factory('socket', function ($rootScope) {
   var socket = io.connect("http://csgrad07.nwmissouri.edu:2000");
   return {
     on: function (eventName, callback) {
-      socket.on(eventName, function () {  
+      socket.on(eventName, function () {
         var args = arguments;
         $rootScope.$apply(function () {
           callback.apply(socket, args);
@@ -887,7 +957,12 @@ myApp.factory('socket', function ($rootScope) {
     }
   };
 });
-
+myApp.filter('capitalize', function() {
+    return function(input, all) {
+        var reg = (all) ? /([^\W_]+[^\s-]*) */g : /([^\W_]+[^\s-]*)/;
+        return (!!input) ? input.replace(reg, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) : '';
+    }
+});
 angular.module( "ngAutocomplete", []).directive('ngAutocomplete', function($parse) {
         return {
 

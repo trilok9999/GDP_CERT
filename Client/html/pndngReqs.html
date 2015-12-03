@@ -4,7 +4,7 @@
              <!-- <i md-menu-origin class="material-icons md-48 md-avatar">account_circle</i>-->
           <img ng-src="{{member.img}}" class="md-avatar" alt="./images/ic_account_circle_black_48px.svg" />
           <div class="md-list-item-text compact">
-            <h3>{{member.fname}} {{member.lname}}</h3>
+            <h3>{{member.fname | capitalize}} {{member.lname | capitalize}}</h3>
             <p>{{member.emailid}}</p>
           </div>
           
